@@ -1,0 +1,28 @@
+EC2 Deployming guide https://medium.com/@rizkiprass/step-by-step-guide-deploying-a-react-app-on-aws-ec2-b2965af05aa4
+
+Connect with server 
+ssh -i /Users/dheerajpoonia29/Developer/nexa-pay/nexapay-frontend-login-key.pem ubuntu@65.1.108.137
+
+Intalled on server 
+0. added code directory 'nexapay-frontend' on root location
+1. npm
+2. nodejs
+3. nginx
+$sudo mkdir /var/www/html/my-react-app
+$sudo vi /etc/nginx/conf.d/react.conf
+    server {
+    listen 80;
+    listen [::]:80;
+    root /var/www/html/my-react-app/build;
+    
+    #react app
+    location / {
+        try_files $uri /index.html;  
+    }
+    }
+4. clone repo
+git clone https://dpoonia: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@github.com/dheerajpoonia29/nexapay-frontend.git
+5. intall dependencies
+$cd nexapay-frontend
+$npm install
+$npm start
