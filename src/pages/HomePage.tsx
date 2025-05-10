@@ -3,14 +3,16 @@ import Header from "../layout/Header";
 function HomePage() {
 
     return (
-        <>
-            {/* <div><Header /></div> */}
-            <div>
-                <h1 className="text-3xl font-bold underline">
-                    Hello world!
-                </h1>
+        <div className="min-h-screen w-full bg-gray-200">
+            <Header />
+            <div className="flex items-center justify-center h-[80vh]">
+                <div className="bg-gray-400 p-10 rounded shadow text-center">
+                    <h1 className="text-2xl font-bold">
+                        Welcome to NexaPay
+                    </h1>
+                </div>
             </div>
-        </>
+        </div>
     )
 }
 
