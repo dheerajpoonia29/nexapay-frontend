@@ -1,10 +1,21 @@
-import React from 'react';
+import { Link } from "react-router-dom";
 
-const Header: React.FC = () => {
+function Header() {
     return (
-        <header className="bg-gray-400 p-4 flex justify-end space-x-4">
-            <button className="bg-gray-200 px-4 py-2 rounded">Signup</button>
-            <button className="bg-gray-200 px-4 py-2 rounded">Login</button>
+        <header className="bg-gray-400 p-4 flex justify-between items-center">
+            <div className="">
+                <Link to="/">
+                    <button className="bg-gray-200 px-4 py-2 rounded">Home</button>
+                </Link>
+            </div>
+            <div className="space-x-4">
+                <Link to="/signup">
+                    <button className="bg-gray-200 px-4 py-2 rounded">Signup</button>
+                </Link>
+                <Link to="/login">
+                    <button className="bg-gray-200 px-4 py-2 rounded">Login</button>
+                </Link>
+            </div>
         </header>
     );
 };
