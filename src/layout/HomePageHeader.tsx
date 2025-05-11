@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function Header() {
+function HomePageHeader() {
     return (
         <header className="bg-gray-400 p-4 flex justify-between items-center">
             <div className="">
@@ -20,4 +20,4 @@ function Header() {
     );
 };
 
-export default Header;
+export default HomePageHeader;

@@ -1,14 +1,41 @@
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
-const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+const LoginPage = () => {
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Add login logic here (API call etc.)
-        console.log("Logging in with", { email, password });
+        console.log("login data:", formData);
+
+        // Add login logic here (API call etc.)
+        fetch("http://localhost:8081/auth/login", {
+            method: "POST",
+            headers: myHeaders,
+            body: JSON.stringify(formData),
+            redirect: "follow"
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log("login success, result: ", result)
+                navigate('/welcome');
+            })
+            .catch((error) => {
+                console.error("login failed, error: ", error)
+            });
     };
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
     return (
         <div className="flex items-center justify-center min-h-[80vh]">
@@ -27,10 +54,11 @@ const Login = () => {
                     <input
                         id="email"
                         type="email"
-                        className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        name="email"
                         placeholder="you@example.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                     />
                 </div>
@@ -42,10 +70,11 @@ const Login = () => {
                     <input
                         id="password"
                         type="password"
+                        name="password"
+                        placeholder="******"
+                        value={formData.password}
+                        onChange={handleChange}
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="********"
                         required
                     />
                 </div>
@@ -61,4 +90,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginPage;

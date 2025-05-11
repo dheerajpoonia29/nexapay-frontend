@@ -1,5 +1,3 @@
-import Header from "../layout/Header";
-
 function HomePage() {
 
     return (
