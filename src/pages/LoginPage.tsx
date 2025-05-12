@@ -35,7 +35,7 @@ const LoginPage = ({ setIsLoggedIn, setUser }:
             .then((result) => {
                 console.log("login success, result: ", result);
                 if (result.responseStatusInt == 200) {
-                    setUser(result.userResponse);
+                    setUser(result.responseData);
                     alert("login successfully")
                     setIsLoggedIn(true);
                     navigate('/welcome');

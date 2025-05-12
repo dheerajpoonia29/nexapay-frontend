@@ -10,6 +10,7 @@ import AccountPage from './pages/AccountPage';
 import WelcomePageHeader from './layout/WelcomePageHeader';
 import LogoutPage from './pages/LogoutPage';
 import type { User } from './helper/TypeConstants';
+import CreateAccountPage from './pages/CreateAccountPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -26,6 +27,7 @@ function App() {
           <Route path="/welcome" element={<WelcomePage user={user} />} />
           <Route path="/account" element={<AccountPage user={user} />} />
           <Route path="/logout" element={<LogoutPage setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/create-account" element={<CreateAccountPage user={user} setUser={setUser} />} />
         </Routes>
       </div>
     </BrowserRouter>

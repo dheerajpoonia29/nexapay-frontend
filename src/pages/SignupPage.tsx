@@ -20,7 +20,6 @@ const SignupPage = () => {
         e.preventDefault();
         console.log("Signup Data:", formData);
 
-        // Send this data to your backend
         fetch(`${BASE_URL}/auth/signup`, {
             method: "POST",
             headers: myHeaders,
