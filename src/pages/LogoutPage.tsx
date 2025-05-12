@@ -6,6 +6,7 @@ const LogoutPage = ({ setIsLoggedIn }: { setIsLoggedIn: (val: boolean) => void }
     // todo fix popping up multiple times
     useEffect(() => {
         alert("Logout successfully");
+        // todo setUser null
         setIsLoggedIn(false);
         navigate('/');
     }, []);

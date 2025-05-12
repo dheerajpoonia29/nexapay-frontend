@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -24,12 +27,20 @@ const SignupPage = () => {
             body: JSON.stringify(formData),
             redirect: "follow"
         })
-            .then((response) => response.text())
+            .then((response) => response.json())
             .then((result) => {
-                console.log("signup success, result: ", result)
+                if (result.responseStatusInt == 201) {
+                    alert("account created successfully, please login")
+                    navigate('/login')
+                } else if (result.responseStatusInt == 409) {
+                    alert("account already exist with provied email");
+                } else {
+                    alert("something went wrong");
+                }
             })
             .catch((error) => {
-                console.error("signup failed, error: ", error)
+                console.error("iternal server error: ", error);
+                alert("internal server error");
             });
     };
 
