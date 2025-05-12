@@ -8,9 +8,12 @@ import SignupPage from './pages/SignupPage';
 import WelcomePage from './pages/WelcomePage';
 import AccountPage from './pages/AccountPage';
 import WelcomePageHeader from './layout/WelcomePageHeader';
+import LogoutPage from './pages/LogoutPage';
+import type { User } from './helper/TypeConstants';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
 
   return (
     <BrowserRouter>
@@ -18,10 +21,11 @@ function App() {
         {isLoggedIn ? <WelcomePageHeader /> : <HomePageHeader />}
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/welcome" element={<WelcomePage />} />
+          <Route path="/welcome" element={<WelcomePage user={user} />} />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/logout" element={<LogoutPage setIsLoggedIn={setIsLoggedIn} />} />
         </Routes>
       </div>
     </BrowserRouter>

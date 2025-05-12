@@ -11,12 +11,14 @@ const SignupPage = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         console.log("Signup Data:", formData);
 
         // Send this data to your backend
-        fetch("http://localhost:8081/auth/signup", {
+        fetch(`${BASE_URL}/auth/signup`, {
             method: "POST",
             headers: myHeaders,
             body: JSON.stringify(formData),

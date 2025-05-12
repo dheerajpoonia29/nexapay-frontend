@@ -12,6 +12,9 @@ function WelcomePageHeader() {
                 <Link to="/account">
                     <button className="bg-gray-200 px-4 py-2 rounded">Account</button>
                 </Link>
+                <Link to="/logout">
+                    <button className="bg-gray-200 px-4 py-2 rounded">Logout</button>
+                </Link>
             </div>
         </header>
     );

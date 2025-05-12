@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import type { User } from "../helper/TypeConstants";
 
-const LoginPage = () => {
+const LoginPage = ({ setIsLoggedIn, setUser }:
+    {
+        setIsLoggedIn: (val: boolean) => void;
+        setUser: (val: User) => void
+    }) => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -13,12 +18,14 @@ const LoginPage = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         console.log("login data:", formData);
 
         // Add login logic here (API call etc.)
-        fetch("http://localhost:8081/auth/login", {
+        fetch(`${BASE_URL}/auth/login`, {
             method: "POST",
             headers: myHeaders,
             body: JSON.stringify(formData),
@@ -26,10 +33,18 @@ const LoginPage = () => {
         })
             .then((response) => response.json())
             .then((result) => {
-                console.log("login success, result: ", result)
-                navigate('/welcome');
+                console.log("login success, result: ", result);
+                if (result.responseStatusInt == 200) {
+                    setUser(result.userResponse);
+                    alert("login successfully")
+                    setIsLoggedIn(true);
+                    navigate('/welcome');
+                } else {
+                    alert("invalid authentication, try again")
+                }
             })
             .catch((error) => {
+                alert("login failed")
                 console.error("login failed, error: ", error)
             });
     };
