@@ -53,6 +53,7 @@ const AccountPage = ({ user }: { user: User | null }) => {
                                 </div>
                                 <div>
                                     <label className="block text-sm text-gray-500">Balance</label>
+                                    {/* todo timely update account balance */}
                                     <p className="text-lg font-medium">₹ {user?.accountData?.balance}</p>
                                 </div>
                             </div>

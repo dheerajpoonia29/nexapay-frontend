@@ -9,18 +9,21 @@ import WelcomePage from './pages/WelcomePage';
 import AccountPage from './pages/AccountPage';
 import WelcomePageHeader from './layout/WelcomePageHeader';
 import LogoutPage from './pages/LogoutPage';
-import type { User } from './helper/TypeConstants';
+import type { User, Transaction } from './helper/TypeConstants';
 import CreateAccountPage from './pages/CreateAccountPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BankingPage from './pages/BankingPage';
 import Footer from './layout/Footer';
 import { DeleteAccount } from './helper/DeleteAccount';
+import TransferPage from './pages/TransferPage';
 import TransactionPage from './pages/TransactionPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [hasFetched, setHasFetched] = useState(false);
 
   return (
     <BrowserRouter>
@@ -47,7 +50,16 @@ function App() {
             <Route path="/create-account" element={<CreateAccountPage user={user} setUser={setUser} />} />
             <Route path="/banking" element={<BankingPage user={user} />} />
             <Route path="/banking/delete" element={<DeleteAccount user={user} setUser={setUser} />} />
-            <Route path="/banking/transfer" element={<TransactionPage user={user} setUser={setUser} />} />
+            <Route path="/banking/transfer" element={<TransferPage user={user} setUser={setUser} />} />
+            <Route path="/banking/transactions" element={
+              <TransactionPage
+                user={user}
+                transactions={transactions}
+                setTransactions={setTransactions}
+                hasFetched={hasFetched}
+                setHasFetched={setHasFetched}
+              />
+            } />
           </Routes>
         </div>
         <Footer />

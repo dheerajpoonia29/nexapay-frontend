@@ -1,157 +1,121 @@
-import { useState } from 'react';
-import type { User, Transaction } from '../helper/TypeConstants';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import type { Transaction, User } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
-const FetchAndUpdateTransaction = (user: User | null, setUser: (val: User) => void) => {
-    console.log("fetching user information");
-
-    const BASE_URL = import.meta.env.VITE_API_USER_API_URL;
-
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    fetch(`${BASE_URL}/account/search-by-account-no?accountNo=${user?.accountData?.accountNo}`, {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow"
-    })
-        .then(res => res.json())
-        .then(result => {
-            console.log("api call success");
-            if (result.responseStatusInt === 200) {
-                console.log("success api call");
-                const updatedUser = {
-                    ...user,
-                    name: user?.name ?? "",
-                    email: user?.email ?? "",
-                    accountData: result.responseData
-                };
-                setUser(updatedUser);
-                toast.info("User account updated");
-            } else {
-                console.warn("Failed to fetch updated account info");
-                toast.warn("Failed to fetch updated account info");
-            }
-        })
-        .catch(err => {
-            console.error("Error updating transaction/account: ", err);
-            toast.error("Failed to fetch updated account info");
+const FetchTransaction = async (
+    accountNo: string,
+    setTransactions: (val: Transaction[]) => void
+) => {
+    const BASE_URL = import.meta.env.VITE_API_BANK_API_URL;
+    try {
+        const response = await fetch(`${BASE_URL}/bank/get-transactions?accountNo=${accountNo}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
         });
+
+        const result = await response.json();
+        if (result.responseStatusInt === 200) {
+            console.log("transaction = ", result?.responseData)
+            const transactionList = result?.responseData;
+            const filteredTransactions = transactionList.filter(tx => tx.status === true);
+            setTransactions(filteredTransactions);  // Use filteredTransactions here
+
+            toast.info('Transactions fetched successfully');
+        } else {
+            toast.warn('Failed to fetch transactions');
+        }
+    } catch (err) {
+        console.error(err);
+        toast.error('Error fetching transactions');
+    }
 };
 
-const TransactionPage = ({ user, setUser }: {
+const TransactionPage = ({
+    user,
+    transactions,
+    setTransactions,
+    hasFetched,
+    setHasFetched
+}: {
     user: User | null;
-    setUser: (val: User) => void;
+    transactions: Transaction[];
+    setTransactions: (val: Transaction[]) => void;
+    hasFetched: boolean;
+    setHasFetched: (val: boolean) => void;
 }) => {
     ValidateAuth(user, '/logout');
     ValidateAccount(user, '/welcome');
 
-    const navigate = useNavigate();
-
-    const [formData, setFormData] = useState({
-        fromAccountNo: user?.accountData?.accountNo,
-        toAccountNo: "",
-        amount: 0
-    });
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const BASE_URL = import.meta.env.VITE_API_BANK_API_URL;
-
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (!user?.accountData?.accountNo) {
-            toast.error("You don't have a valid source account.");
-            return;
+    useEffect(() => {
+        if (user?.accountData?.accountNo && !hasFetched) {
+            setHasFetched(true)
+            FetchTransaction(user.accountData.accountNo, setTransactions);
         }
+    }, [user]);
 
-        fetch(`${BASE_URL}/bank/transaction`, {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify(formData),
-            redirect: "follow"
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                if (result.responseStatusInt === 201) {
-                    const responseData: Transaction = result.responseData;
-                    if (responseData.status == true) {
-                        toast.success("Transaction successful!");
-                        // todo fetch account again
-                        FetchAndUpdateTransaction(user, setUser);
-                        navigate('/account')
-                    } else {
-                        toast.warn(responseData.statusInfo);
-                    }
-                } else if (result.responseStatusInt === 404) {
-                    toast.warn("Account not found");
-                } else {
-                    toast.error("Transaction failed");
-                }
-            })
-            .catch((error) => {
-                console.error("Internal server error: ", error);
-                toast.error("Internal server error");
-            });
+    const handleRefresh = () => {
+        if (user?.accountData?.accountNo) {
+            FetchTransaction(user.accountData.accountNo, setTransactions);
+        }
     };
 
     return (
         <div className="flex items-center justify-center min-h-[80vh] bg-gray-100 px-4">
-            <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-3xl text-gray-800">
-                <h2 className="text-2xl font-bold text-center mb-6">Transfer Funds</h2>
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                        <label htmlFor="fromAccount" className="block font-semibold mb-1">From Account</label>
-                        <input
-                            id="fromAccount"
-                            name="fromAccountNo"
-                            type="text"
-                            value={formData?.fromAccountNo || ''}
-                            disabled
-                            className="w-full border border-gray-300 rounded-md px-4 py-2 bg-gray-100"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="toAccount" className="block font-semibold mb-1">To Account</label>
-                        <input
-                            id="toAccount"
-                            name="toAccountNo"
-                            type="text"
-                            value={formData?.toAccountNo || ''}
-                            onChange={handleChange}
-                            required
-                            className="w-full border border-gray-300 rounded-md px-4 py-2"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="amount" className="block font-semibold mb-1">Amount</label>
-                        <input
-                            id="amount"
-                            name="amount"
-                            type="number"
-                            value={formData?.amount || ''}
-                            onChange={handleChange}
-                            min="1"
-                            required
-                            className="w-full border border-gray-300 rounded-md px-4 py-2"
-                        />
-                    </div>
+            <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-4xl text-gray-800">
+                <div className="flex justify-between items-center border-b pb-4 mb-6">
+                    <h2 className="text-3xl font-bold text-blue-600">
+                        Transaction History
+                    </h2>
                     <button
-                        type="submit"
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
+                        onClick={handleRefresh}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition"
                     >
-                        Send Money
+                        Refresh
                     </button>
-                </form>
+                </div>
+
+                {transactions.length === 0 ? (
+                    <p className="text-center text-lg text-gray-500">No transactions found.</p>
+                ) : (
+                    <div className="overflow-x-auto rounded-lg shadow-inner max-h-[450px] overflow-y-auto">
+                        <table className="min-w-full table-auto text-sm text-left text-gray-700">
+                            <thead className="bg-gray-100 sticky top-0 z-10 shadow">
+                                <tr>
+                                    <th className="px-4 py-3 font-semibold">S.No</th>
+                                    <th className="px-4 py-3 font-semibold">Date</th>
+                                    <th className="px-4 py-3 font-semibold">Amount (₹)</th>
+                                    <th className="px-4 py-3 font-semibold">Credit/Debit</th>
+                                    <th className="px-4 py-3 font-semibold">Account No</th>
+                                    <th className="px-4 py-3 font-semibold">Transaction ID</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {transactions.map((txn, idx) => {
+                                    const isSent = txn.fromAccountNo === user?.accountData?.accountNo;
+                                    return (
+                                        <tr
+                                            key={txn.transactionId}
+                                            className="hover:bg-gray-50 transition-colors"
+                                        >
+                                            <td className="px-4 py-3 text-center">{idx + 1}</td>
+                                            <td className="px-4 py-3">
+                                                {new Date(txn.date).toLocaleString()}
+                                            </td>
+                                            <td className="px-4 py-3 font-medium">₹ {txn.amount}</td>
+                                            <td className={`px-4 py-3 ${isSent ? 'text-red-600' : 'text-green-600'}`}>
+                                                {isSent ? 'Sent' : 'Recieved'}
+                                            </td>
+                                            <td className="px-4 py-3">{isSent ? txn.toAccountNo : txn.fromAccountNo}</td>
+                                            <td className="px-4 py-3 text-xs break-all">{txn.transactionId}</td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
         </div>
     );
