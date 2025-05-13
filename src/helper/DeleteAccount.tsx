@@ -14,7 +14,7 @@ export const DeleteAccount = ({ user, setUser }:
 
     const navigate = useNavigate();
 
-    const BASE_URL = import.meta.env.VITE_API_USER_API_URL;
+    const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");

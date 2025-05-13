@@ -15,7 +15,7 @@ const SignupPage = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const BASE_URL = import.meta.env.VITE_API_USER_API_URL;
+    const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
