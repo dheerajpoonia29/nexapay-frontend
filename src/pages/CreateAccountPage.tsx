@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { User } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const CreateAccountPage = ({ user, setUser }:
     {
@@ -39,7 +40,7 @@ const CreateAccountPage = ({ user, setUser }:
             .then((result) => {
                 if (result.responseStatusInt == 201) {
                     if (result.responseData == null) {
-                        alert("create account api does not return account detail")
+                        toast.error("Create account api does not return account detail")
                         navigate('/welcome')
                     }
                     setUser({
@@ -48,17 +49,17 @@ const CreateAccountPage = ({ user, setUser }:
                         email: user?.email ?? "",
                         accountData: result?.responseData ?? null
                     });
-                    alert("account created successfully, please login")
+                    toast.success("Bank account created successfully");
                     navigate('/welcome')
                 } else if (result.responseStatusInt == 409) {
-                    alert("account already exist with provied email");
+                    toast.success("Account already exist");
                 } else {
-                    alert("something went wrong");
+                    toast.error("Something went wrong");
                 }
             })
             .catch((error) => {
                 console.error("iternal server error: ", error);
-                alert("internal server error");
+                toast.error("Internal server error");
             });
     };
 

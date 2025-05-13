@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignupPage = () => {
     const navigate = useNavigate();
@@ -29,17 +30,17 @@ const SignupPage = () => {
             .then((response) => response.json())
             .then((result) => {
                 if (result.responseStatusInt == 201) {
-                    alert("account created successfully, please login")
+                    toast.success("Account created successfully.")
                     navigate('/login')
                 } else if (result.responseStatusInt == 409) {
-                    alert("account already exist with provied email");
+                    toast.warn("Account already exsit.")
                 } else {
-                    alert("something went wrong");
+                    toast.error("something went wrong");
                 }
             })
             .catch((error) => {
                 console.error("iternal server error: ", error);
-                alert("internal server error");
+                toast.error("Internal server error");
             });
     };
 

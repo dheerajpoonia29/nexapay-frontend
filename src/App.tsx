@@ -11,6 +11,8 @@ import WelcomePageHeader from './layout/WelcomePageHeader';
 import LogoutPage from './pages/LogoutPage';
 import type { User } from './helper/TypeConstants';
 import CreateAccountPage from './pages/CreateAccountPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -18,6 +20,16 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
       <div className="min-h-screen w-full bg-gray-200">
         {isLoggedIn ? <WelcomePageHeader /> : <HomePageHeader />}
         <Routes>

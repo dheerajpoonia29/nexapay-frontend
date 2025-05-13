@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { User } from "../helper/TypeConstants";
+import { toast } from "react-toastify";
 
 const LoginPage = ({ setIsLoggedIn, setUser }:
     {
@@ -33,23 +34,25 @@ const LoginPage = ({ setIsLoggedIn, setUser }:
         })
             .then((response) => response.json())
             .then((result) => {
-                console.log("login success, result: ", result);
+                console.log("login, result: ", result);
                 if (result?.responseStatusInt == 200) {
+                    console.log("login success");
                     if (result.responseData == null) {
-                        alert("login api does not return user detail")
+                        toast.error("Login failed");
                         navigate('/login')
                     }
                     setUser(result?.responseData);
-                    alert("login successfully")
+                    toast.success("Login success");
                     setIsLoggedIn(true);
                     navigate('/welcome');
                 } else {
-                    alert("invalid authentication, try again")
+                    console.error("login failed, invalid authentication");
+                    toast.warn("Login failed, invalid authentication!");
                 }
             })
             .catch((error) => {
-                alert("login failed")
                 console.error("login failed, error: ", error)
+                toast.error("Login failed");
             });
     };
 
