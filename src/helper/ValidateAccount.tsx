@@ -7,8 +7,8 @@ const ValidateAuth = (user: User | null, redirectTo: string = "/") => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user == null) {
-            toast.warn("User not found, logging out!!");
+        if (user?.accountData == null) {
+            toast.warn("Account not created yet!!");
             navigate(redirectTo);
         }
     }, [user, navigate]);

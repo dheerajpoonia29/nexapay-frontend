@@ -19,7 +19,7 @@ const LoginPage = ({ setIsLoggedIn, setUser }:
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const BASE_URL = import.meta.env.VITE_API_USER_API_URL;
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

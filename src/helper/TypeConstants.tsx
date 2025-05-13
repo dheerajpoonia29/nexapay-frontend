@@ -1,9 +1,21 @@
+type Account = {
+    accountNo: string,
+    balance: number,
+    userId: number
+}
+
 export type User = {
     name: string;
     email: string;
-    accountData: {
-        accountNo: string,
-        balance: number,
-        userId: number
-    }
+    accountData: Account | null;
+};
+
+export type Transaction = {
+    transactionId: number,
+    fromAccountNo: string,
+    toAccountNo: string,
+    amount: number,
+    date: Date,
+    status: boolean,
+    statusInfo: string
 };

@@ -15,7 +15,10 @@ const SignupPage = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const BASE_URL = import.meta.env.VITE_API_USER_API_URL;
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -43,9 +46,6 @@ const SignupPage = () => {
                 toast.error("Internal server error");
             });
     };
-
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
 
     return (
         <div className="flex justify-center items-center h-[80vh]">

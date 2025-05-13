@@ -13,6 +13,10 @@ import type { User } from './helper/TypeConstants';
 import CreateAccountPage from './pages/CreateAccountPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import BankingPage from './pages/BankingPage';
+import Footer from './layout/Footer';
+import { DeleteAccount } from './helper/DeleteAccount';
+import TransactionPage from './pages/TransactionPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -30,19 +34,26 @@ function App() {
         draggable
         theme="colored"
       />
-      <div className="min-h-screen w-full bg-gray-200">
+      <div className="flex flex-col min-h-screen bg-gray-200">
         {isLoggedIn ? <WelcomePageHeader /> : <HomePageHeader />}
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/welcome" element={<WelcomePage user={user} />} />
-          <Route path="/account" element={<AccountPage user={user} />} />
-          <Route path="/logout" element={<LogoutPage setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/create-account" element={<CreateAccountPage user={user} setUser={setUser} />} />
-        </Routes>
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/welcome" element={<WelcomePage user={user} />} />
+            <Route path="/account" element={<AccountPage user={user} />} />
+            <Route path="/logout" element={<LogoutPage setIsLoggedIn={setIsLoggedIn} />} />
+            <Route path="/create-account" element={<CreateAccountPage user={user} setUser={setUser} />} />
+            <Route path="/banking" element={<BankingPage user={user} />} />
+            <Route path="/banking/delete" element={<DeleteAccount user={user} setUser={setUser} />} />
+            <Route path="/banking/transfer" element={<TransactionPage user={user} setUser={setUser} />} />
+          </Routes>
+        </div>
+        <Footer />
       </div>
-    </BrowserRouter>
+
+    </BrowserRouter >
   )
 }
 
