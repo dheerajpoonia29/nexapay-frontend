@@ -34,8 +34,12 @@ const LoginPage = ({ setIsLoggedIn, setUser }:
             .then((response) => response.json())
             .then((result) => {
                 console.log("login success, result: ", result);
-                if (result.responseStatusInt == 200) {
-                    setUser(result.responseData);
+                if (result?.responseStatusInt == 200) {
+                    if (result.responseData == null) {
+                        alert("login api does not return user detail")
+                        navigate('/login')
+                    }
+                    setUser(result?.responseData);
                     alert("login successfully")
                     setIsLoggedIn(true);
                     navigate('/welcome');

@@ -7,9 +7,3 @@ export type User = {
         userId: number
     }
 };
-
-export type Account = {
-    accountNo: string,
-    balance: number,
-    userId: number
-}

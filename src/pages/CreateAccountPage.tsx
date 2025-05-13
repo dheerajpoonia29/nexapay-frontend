@@ -38,7 +38,16 @@ const CreateAccountPage = ({ user, setUser }:
             .then((response) => response.json())
             .then((result) => {
                 if (result.responseStatusInt == 201) {
-                    setUser({ ...user, accountData: result?.responseData });
+                    if (result.responseData == null) {
+                        alert("create account api does not return account detail")
+                        navigate('/welcome')
+                    }
+                    setUser({
+                        ...user,
+                        name: user?.name ?? "",
+                        email: user?.email ?? "",
+                        accountData: result?.responseData ?? null
+                    });
                     alert("account created successfully, please login")
                     navigate('/welcome')
                 } else if (result.responseStatusInt == 409) {
