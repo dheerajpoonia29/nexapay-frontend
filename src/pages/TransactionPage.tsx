@@ -18,7 +18,7 @@ const FetchTransaction = async (
         const result = await response.json();
         if (result.responseStatusInt === 200) {
             console.log("transaction = ", result?.responseData)
-            const transactionList = result?.responseData;
+            const transactionList = result?.responseData as Transaction[];
             const filteredTransactions = transactionList.filter(tx => tx.status === true);
             setTransactions(filteredTransactions);  // Use filteredTransactions here
 
