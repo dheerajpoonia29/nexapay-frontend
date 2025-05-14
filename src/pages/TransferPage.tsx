@@ -88,7 +88,8 @@ const TransferPage = ({ user, setUser }: {
                         toast.success("Transaction successful!");
                         // todo fetch account again
                         FetchAndUpdateTransaction(user, setUser);
-                        navigate('/account')
+                        // todo send some prop so that transaction auto refresh
+                        navigate('/banking/transactions');
                     } else {
                         toast.warn(responseData.statusInfo);
                     }
