@@ -1,0 +1,16 @@
+services:
+  server:
+    build: .
+    container_name: frontend-container
+    image: nexapay-frontend-image
+    command: npm run dev
+    environment:
+      NODE_ENV: development
+      VITE_API_USER_AND_ACCOUNT_API_URL: http://localhost:8081
+      VITE_API_BANK_API_URL: http://localhost:8082
+    ports:
+      - 5173:5173
+    # for reflecting local changes in live mode
+    volumes:  
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
