@@ -13,7 +13,7 @@ const FetchAndUpdateTransaction = (user: User | null, setUser: (val: User) => vo
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    fetch(`${BASE_URL}/account/search-by-account-no?accountNo=${user?.accountData?.accountNo}`, {
+    fetch(`${BASE_URL}/account/get-by-account-no?accountNo=${user?.accountData?.accountNo}`, {
         method: "GET",
         headers: myHeaders,
         redirect: "follow"
@@ -74,7 +74,7 @@ const TransferPage = ({ user, setUser }: {
             return;
         }
 
-        fetch(`${BASE_URL}/bank/transaction`, {
+        fetch(`${BASE_URL}/bank/transfer`, {
             method: "POST",
             headers: myHeaders,
             body: JSON.stringify(formData),

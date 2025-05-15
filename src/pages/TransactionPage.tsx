@@ -10,7 +10,7 @@ const FetchTransaction = async (
 ) => {
     const BASE_URL = import.meta.env.VITE_API_BANK_API_URL;
     try {
-        const response = await fetch(`${BASE_URL}/bank/get-transactions?accountNo=${accountNo}`, {
+        const response = await fetch(`${BASE_URL}/bank/get-transfers?accountNo=${accountNo}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
