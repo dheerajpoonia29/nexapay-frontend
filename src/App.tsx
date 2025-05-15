@@ -1,23 +1,27 @@
 import './App.css'
 import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import HomePageHeader from './layout/HomePageHeader';
+
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import WelcomePage from './pages/WelcomePage';
-import AccountPage from './pages/AccountPage';
-import WelcomePageHeader from './layout/WelcomePageHeader';
 import LogoutPage from './pages/LogoutPage';
-import type { User, Transaction } from './helper/TypeConstants';
-import CreateAccountPage from './pages/CreateAccountPage';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import WelcomePage from './pages/WelcomePage';
 import BankingPage from './pages/BankingPage';
-import Footer from './layout/Footer';
-import { DeleteAccount } from './helper/DeleteAccount';
+import AccountPage from './pages/AccountPage';
 import TransferPage from './pages/TransferPage';
 import TransactionPage from './pages/TransactionPage';
+import CreateAccountPage from './pages/CreateAccountPage';
+import DeleteAccountPage from './pages/DeleteAccountPage';
+
+import Footer from './layout/Footer';
+import WelcomePageHeader from './layout/WelcomePageHeader';
+import HomePageHeader from './layout/HomePageHeader';
+
+import type { User, Transaction } from './helper/TypeConstants';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -49,7 +53,7 @@ function App() {
             <Route path="/logout" element={<LogoutPage setIsLoggedIn={setIsLoggedIn} />} />
             <Route path="/create-account" element={<CreateAccountPage user={user} setUser={setUser} />} />
             <Route path="/banking" element={<BankingPage user={user} />} />
-            <Route path="/banking/delete" element={<DeleteAccount user={user} setUser={setUser} />} />
+            <Route path="/banking/delete" element={<DeleteAccountPage user={user} setUser={setUser} />} />
             <Route path="/banking/transfer" element={<TransferPage user={user} setUser={setUser} />} />
             <Route path="/banking/transactions" element={
               <TransactionPage

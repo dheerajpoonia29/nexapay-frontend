@@ -1,16 +1,13 @@
-import ValidateAuth from '../helper/ValidateAuth';
-import ValidateAccount from '../helper/ValidateAccount';
+
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
-import type { User } from './TypeConstants';
+import type { User } from '../helper/TypeConstants';
 
 export const DeleteAccount = ({ user, setUser }:
     {
         user: User | null;
         setUser: (val: User) => void
     }) => {
-    ValidateAuth(user, '/logout');
-    ValidateAccount(user, '/welcome');
 
     const navigate = useNavigate();
 
@@ -36,9 +33,9 @@ export const DeleteAccount = ({ user, setUser }:
                     accountData: null
                 });
 
-                navigate('/welcome')
+                navigate('/welcome');
             } else if (result.responseStatusInt == 404) {
-                toast.warn("Account not found.")
+                toast.warn("Account not found.");
             } else {
                 toast.error("something went wrong");
             }
@@ -47,6 +44,4 @@ export const DeleteAccount = ({ user, setUser }:
             console.error("iternal server error: ", error);
             toast.error("Internal server error");
         });
-
-    return <></>
 }
