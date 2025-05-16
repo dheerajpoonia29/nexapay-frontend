@@ -49,7 +49,6 @@ const AccountPage = ({ user }: { user: UserType | null }) => {
                         ) : (<></>)}
                     </div>
 
-
                     {/* Bank Details */}
                     <div>
                         <h3 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">

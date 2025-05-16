@@ -16,7 +16,7 @@ export async function getBanks(): Promise<BankType[] | null> {
         });
 
         const result = await response.json();
-        console.log("get banks, result = ", result)
+        console.log("get banks, result = ", result);
 
         if (result.responseStatusInt === 200) {
             console.log("got banks");

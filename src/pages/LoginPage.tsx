@@ -25,7 +25,6 @@ const LoginPage = ({ setIsLoggedIn, setUser }:
         e.preventDefault();
         console.log("login data:", formData);
 
-        // Add login logic here (API call etc.)
         fetch(`${BASE_URL}/auth/login`, {
             method: "POST",
             headers: myHeaders,

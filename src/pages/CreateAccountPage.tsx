@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import { useNavigate } from 'react-router-dom';
-import { toast } from "react-toastify";
+import { createAccount } from '../client/AccountClient';
 
 const CreateAccountPage = ({ user, setUser }:
     {
@@ -13,58 +13,23 @@ const CreateAccountPage = ({ user, setUser }:
 
     const navigate = useNavigate();
 
-    const [name, setName] = useState(user?.name);
-    const [email, setEmail] = useState(user?.email);
+    const [formData, setFormData] = useState({
+        name: user?.name,
+        email: user?.email
+    });
 
-    const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Create Account:', { name, email });
-
-        fetch(`${BASE_URL}/account/create`, {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify({
-                "ifscCode": "hdfc002",
-                "userRequest": {
-                    "name": name,
-                    "email": email
-                },
-                "bankRequest": {
-                    "id": 1
-                }
-            }),
-            redirect: "follow"
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                if (result.responseStatusInt == 201) {
-                    if (result.responseData == null) {
-                        toast.error("Create account api does not return account detail")
-                        navigate('/welcome')
-                    }
-                    setUser({
-                        ...user,
-                        name: user?.name ?? "",
-                        email: user?.email ?? "",
-                        accountData: result?.responseData ?? null
-                    });
-                    toast.success("Bank account created successfully");
-                    navigate('/welcome')
-                } else if (result.responseStatusInt == 409) {
-                    toast.success("Account already exist");
-                } else {
-                    toast.error("Something went wrong");
-                }
-            })
-            .catch((error) => {
-                console.error("iternal server error: ", error);
-                toast.error("Internal server error");
-            });
+        console.log('calling create account client, formData', formData);
+        createAccount({ user, setUser, formData });
+        navigate('/welcome');
     };
 
     return (
@@ -77,8 +42,10 @@ const CreateAccountPage = ({ user, setUser }:
                         <input
                             id="name"
                             type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            name="name"
+                            placeholder="ram sharma"
+                            value={formData.name}
+                            onChange={handleChange}
                             required
                             disabled
                             className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -89,8 +56,10 @@ const CreateAccountPage = ({ user, setUser }:
                         <input
                             id="email"
                             type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            name="email"
+                            placeholder="you@example.com"
+                            value={formData.email}
+                            onChange={handleChange}
                             required
                             disabled
                             className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"

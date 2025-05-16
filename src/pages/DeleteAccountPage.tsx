@@ -1,4 +1,5 @@
 import type { UserType } from '../helper/TypeConstants';
+import { useNavigate } from 'react-router-dom';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
 import { deleteAccount } from '../client/AccountClient';
@@ -12,6 +13,14 @@ const DeleteAccountPage = ({ user, setUser }:
 
     ValidateAuth(user, '/logout');
     ValidateAccount(user, '/welcome');
+
+    const navigate = useNavigate();
+
+    const handleSubmit = () => {
+        console.log('calling delete account client');
+        deleteAccount({ user, setUser });
+        navigate('/welcome');
+    };
 
     return (
         <div className="flex items-center justify-center min-h-[80vh] bg-gray-100 px-4">
@@ -28,7 +37,7 @@ const DeleteAccountPage = ({ user, setUser }:
 
                 <div className="flex justify-center">
                     <button
-                        onClick={() => deleteAccount({ user, setUser })}
+                        onClick={() => handleSubmit()}
                         className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md transition duration-300"
                     >
                         Delete My Account

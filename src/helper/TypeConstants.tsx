@@ -32,3 +32,9 @@ export type TransferType = {
     status: boolean,
     statusInfo: string
 };
+
+export type UserFormDataType = {
+  name?: string;
+  email?: string;
+  password?: string;
+};
