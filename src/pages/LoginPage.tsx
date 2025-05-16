@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { User } from "../helper/TypeConstants";
+import type { UserType } from "../helper/TypeConstants";
 import { toast } from "react-toastify";
 
 const LoginPage = ({ setIsLoggedIn, setUser }:
     {
         setIsLoggedIn: (val: boolean) => void;
-        setUser: (val: User) => void
+        setUser: (val: UserType) => void
     }) => {
     const navigate = useNavigate();
 

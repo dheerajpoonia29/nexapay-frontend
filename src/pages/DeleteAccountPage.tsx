@@ -1,12 +1,12 @@
-import type { User } from '../helper/TypeConstants';
+import type { UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
-import deleteAccount from '../client/AccountClient';
+import { deleteAccount } from '../client/AccountClient';
 
 const DeleteAccountPage = ({ user, setUser }:
     {
-        user: User | null;
-        setUser: (val: User) => void
+        user: UserType | null;
+        setUser: (val: UserType) => void
     }) => {
     console.log("inside DeleteAccountPage")
 

@@ -1,11 +1,11 @@
 import { toast } from 'react-toastify';
-import type { Transaction } from '../helper/TypeConstants';
+import type { TransferType } from '../helper/TypeConstants';
 
 const BASE_URL = import.meta.env.VITE_API_BANK_API_URL;
 
-const getTransactions = async (
+export const getTransactions = async (
     accountNo: string,
-    setTransactions: (val: Transaction[]) => void
+    setTransactions: (val: TransferType[]) => void
 ) => {
     console.log('inside getTransactions')
 
@@ -22,7 +22,7 @@ const getTransactions = async (
         console.log("get transaction, result = ", result)
 
         if (result.responseStatusInt === 200) {
-            const transactionList = result?.responseData as Transaction[];
+            const transactionList = result?.responseData as TransferType[];
             const filteredTransactions = transactionList.filter(tx => tx.status === true);
             setTransactions(filteredTransactions);
 

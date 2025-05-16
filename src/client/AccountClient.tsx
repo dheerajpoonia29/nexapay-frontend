@@ -1,9 +1,9 @@
 import { toast } from "react-toastify";
-import type { User } from '../helper/TypeConstants';
+import type { UserType } from '../helper/TypeConstants';
 
 interface Props {
-    user: User | null;
-    setUser: (val: User) => void;
+    user: UserType | null;
+    setUser: (val: UserType) => void;
 }
 
 const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
@@ -12,7 +12,7 @@ const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
 //   const { user, setUser } = props;
 // }
 
-const deleteAccount = async ({ user, setUser }: Props) => {
+export const deleteAccount = async ({ user, setUser }: Props) => {
     console.log('inside deleteAccount');
 
     const ENDPOINT = '/account/delete-account';
@@ -47,4 +47,66 @@ const deleteAccount = async ({ user, setUser }: Props) => {
     }
 };
 
-export default deleteAccount;
+export async function createAccount(props: Props) {
+    const { user, setUser } = props;
+
+    console.log('inside createAccount');
+    const ENDPOINT = '/account/create';
+    const URL = BASE_URL + ENDPOINT;
+
+    try {
+        const response = await fetch(`${URL}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                "userRequest": {
+                    "name": name,
+                    "email": email
+                }
+            })
+        });
+
+        const result = await response.json();
+        console.log("create account, result = ", result)
+
+        fetch(`${BASE_URL}/account/create`, {
+            method: "POST",
+            headers: myHeaders,
+            body: JSON.stringify({
+                "userRequest": {
+                    "name": name,
+                    "email": email
+                }
+            }),
+            redirect: "follow"
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                if (result.responseStatusInt == 201) {
+                    if (result.responseData == null) {
+                        toast.error("Create account api does not return account detail")
+                        navigate('/welcome')
+                    }
+                    setUser({
+                        ...user,
+                        name: user?.name ?? "",
+                        email: user?.email ?? "",
+                        accountData: result?.responseData ?? null
+                    });
+                    toast.success("Bank account created successfully");
+                    navigate('/welcome')
+                } else if (result.responseStatusInt == 409) {
+                    toast.success("Account already exist");
+                } else {
+                    toast.error("Something went wrong");
+                }
+            })
+            .catch((error) => {
+                console.error("iternal server error: ", error);
+                toast.error("Internal server error");
+            });
+    } catch (err) {
+        console.error('deleteAccount error: ', err);
+        toast.error('Internal server error');
+    }
+}

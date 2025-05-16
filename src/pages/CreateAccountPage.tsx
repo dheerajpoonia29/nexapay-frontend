@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import type { User } from '../helper/TypeConstants';
+import type { UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 const CreateAccountPage = ({ user, setUser }:
     {
-        user: User | null;
-        setUser: (val: User) => void
+        user: UserType | null;
+        setUser: (val: UserType) => void
     }) => {
     ValidateAuth(user, '/logout');
 

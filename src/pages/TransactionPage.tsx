@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import type { Transaction, User } from '../helper/TypeConstants';
+import type { TransferType, UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
-import getTransactions from '../client/TransactionClient';
+import { getTransactions } from '../client/TransactionClient';
 
 const TransactionPage = ({
     user,
@@ -11,9 +11,9 @@ const TransactionPage = ({
     hasFetched,
     setHasFetched
 }: {
-    user: User | null;
-    transactions: Transaction[];
-    setTransactions: (val: Transaction[]) => void;
+    user: UserType | null;
+    transactions: TransferType[];
+    setTransactions: (val: TransferType[]) => void;
     hasFetched: boolean;
     setHasFetched: (val: boolean) => void;
 }) => {
@@ -38,7 +38,7 @@ const TransactionPage = ({
             <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-4xl text-gray-800">
                 <div className="flex justify-between items-center border-b pb-4 mb-6">
                     <h2 className="text-3xl font-bold text-blue-600">
-                        Transaction History
+                        Transfer History
                     </h2>
                     <button
                         onClick={handleRefresh}
@@ -60,7 +60,7 @@ const TransactionPage = ({
                                     <th className="px-4 py-3 font-semibold">Amount (₹)</th>
                                     <th className="px-4 py-3 font-semibold">Credit/Debit</th>
                                     <th className="px-4 py-3 font-semibold">Account No</th>
-                                    <th className="px-4 py-3 font-semibold">Transaction ID</th>
+                                    <th className="px-4 py-3 font-semibold">Transfer ID</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">

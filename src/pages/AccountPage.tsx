@@ -1,8 +1,8 @@
-import type { User } from '../helper/TypeConstants';
+import type { UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import { Link } from "react-router-dom";
 
-const AccountPage = ({ user }: { user: User | null }) => {
+const AccountPage = ({ user }: { user: UserType | null }) => {
     ValidateAuth(user, '/logout');
 
     return (

@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import type { User } from './TypeConstants';
+import type { UserType } from './TypeConstants';
 import { toast } from "react-toastify";
 
-const ValidateAuth = (user: User | null, redirectTo: string = "/") => {
+const ValidateAuth = (user: UserType | null, redirectTo: string = "/") => {
     const navigate = useNavigate();
 
     useEffect(() => {

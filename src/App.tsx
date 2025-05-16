@@ -19,14 +19,14 @@ import Footer from './layout/Footer';
 import WelcomePageHeader from './layout/WelcomePageHeader';
 import HomePageHeader from './layout/HomePageHeader';
 
-import type { User, Transaction } from './helper/TypeConstants';
+import type { UserType, TransferType } from './helper/TypeConstants';
 
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [user, setUser] = useState<UserType | null>(null);
+  const [transactions, setTransactions] = useState<TransferType[]>([]);
   const [hasFetched, setHasFetched] = useState(false);
 
   return (

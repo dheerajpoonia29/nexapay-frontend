@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import type { User, Transaction } from '../helper/TypeConstants';
+import type { UserType, TransferType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const FetchAndUpdateTransaction = (user: User | null, setUser: (val: User) => void) => {
+const FetchAndUpdateTransaction = (user: UserType | null, setUser: (val: UserType) => void) => {
     console.log("fetching user information");
 
     const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
@@ -43,8 +43,8 @@ const FetchAndUpdateTransaction = (user: User | null, setUser: (val: User) => vo
 };
 
 const TransferPage = ({ user, setUser }: {
-    user: User | null;
-    setUser: (val: User) => void;
+    user: UserType | null;
+    setUser: (val: UserType) => void;
 }) => {
     ValidateAuth(user, '/logout');
     ValidateAccount(user, '/welcome');
@@ -83,9 +83,9 @@ const TransferPage = ({ user, setUser }: {
             .then((response) => response.json())
             .then((result) => {
                 if (result.responseStatusInt === 201) {
-                    const responseData: Transaction = result.responseData;
+                    const responseData: TransferType = result.responseData;
                     if (responseData.status == true) {
-                        toast.success("Transaction successful!");
+                        toast.success("Transfer successful!");
                         // todo fetch account again
                         FetchAndUpdateTransaction(user, setUser);
                         // todo send some prop so that transaction auto refresh
@@ -96,7 +96,7 @@ const TransferPage = ({ user, setUser }: {
                 } else if (result.responseStatusInt === 404) {
                     toast.warn("Account not found");
                 } else {
-                    toast.error("Transaction failed");
+                    toast.error("Transfer failed");
                 }
             })
             .catch((error) => {

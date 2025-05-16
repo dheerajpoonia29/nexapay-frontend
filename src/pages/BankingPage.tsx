@@ -1,4 +1,4 @@
-import type { User } from '../helper/TypeConstants';
+import type { UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
 import { Link } from "react-router-dom";
@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
 
 const BankingPage = ({ user }:
     {
-        user: User | null;
+        user: UserType | null;
     }) => {
     ValidateAuth(user, '/logout');
     ValidateAccount(user, '/welcome');

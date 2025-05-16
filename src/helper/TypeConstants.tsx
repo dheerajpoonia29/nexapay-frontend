@@ -1,16 +1,16 @@
-type Account = {
+export type AccountType = {
     accountNo: string,
     balance: number,
     userId: number
 }
 
-export type User = {
+export type UserType = {
     name: string;
     email: string;
-    accountData: Account | null;
+    accountData: AccountType | null;
 };
 
-export type Transaction = {
+export type TransferType = {
     transferId: number,
     fromAccountNo: string,
     toAccountNo: string,
