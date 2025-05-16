@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import type { Transaction, User } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
-import FetchTransaction from '../service/FetchTransaction';
+import FetchTransactionClient from '../client/FetchTransactionClient';
 
 const TransactionPage = ({
     user,
@@ -23,13 +23,13 @@ const TransactionPage = ({
     useEffect(() => {
         if (user?.accountData?.accountNo && !hasFetched) {
             setHasFetched(true)
-            FetchTransaction(user.accountData.accountNo, setTransactions);
+            FetchTransactionClient(user.accountData.accountNo, setTransactions);
         }
     }, [user]);
 
     const handleRefresh = () => {
         if (user?.accountData?.accountNo) {
-            FetchTransaction(user.accountData.accountNo, setTransactions);
+            FetchTransactionClient(user.accountData.accountNo, setTransactions);
         }
     };
 
