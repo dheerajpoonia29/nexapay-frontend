@@ -35,5 +35,3 @@ export const getTransactions = async (
         toast.error('Error fetching transactions');
     }
 };
-
-export default getTransactions;

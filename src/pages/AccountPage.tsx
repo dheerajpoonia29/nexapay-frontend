@@ -1,6 +1,5 @@
 import type { UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
-import { Link } from "react-router-dom";
 
 const AccountPage = ({ user }: { user: UserType | null }) => {
     ValidateAuth(user, '/logout');
@@ -12,7 +11,8 @@ const AccountPage = ({ user }: { user: UserType | null }) => {
                     User Account
                 </h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                    {/* Personal Details */}
                     <div>
                         <h3 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">
                             Personal Information
@@ -34,18 +34,7 @@ const AccountPage = ({ user }: { user: UserType | null }) => {
                         <h3 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">
                             Account Information
                         </h3>
-                        {user?.accountData == null ? (
-                            <div>
-                                <p className="text-lg mb-4">You haven't created an account yet.</p>
-                                <Link to="/create-account">
-                                    <button
-                                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md transition duration-300"
-                                    >
-                                        Create Account
-                                    </button>
-                                </Link>
-                            </div>
-                        ) : (
+                        {user?.accountData != null ? (
                             <div className="space-y-3">
                                 <div>
                                     <label className="block text-sm text-gray-500">Account Number</label>
@@ -57,9 +46,30 @@ const AccountPage = ({ user }: { user: UserType | null }) => {
                                     <p className="text-lg font-medium">₹ {user?.accountData?.balance}</p>
                                 </div>
                             </div>
-                        )}
-
+                        ) : (<></>)}
                     </div>
+
+
+                    {/* Bank Details */}
+                    <div>
+                        <h3 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">
+                            Bank Information
+                        </h3>
+                        {user?.accountData != null ? (
+                            <div className="space-y-3">
+                                <div>
+                                    <label className="block text-sm text-gray-500">Account Number</label>
+                                    <p className="text-lg font-medium">{user?.accountData?.accountNo}</p>
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-gray-500">Balance</label>
+                                    {/* todo timely update account balance, can we make this cron job ?? */}
+                                    <p className="text-lg font-medium">₹ {user?.accountData?.balance}</p>
+                                </div>
+                            </div>
+                        ) : (<></>)}
+                    </div>
+
                 </div>
             </div>
         </div>

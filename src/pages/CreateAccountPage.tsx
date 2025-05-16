@@ -29,9 +29,13 @@ const CreateAccountPage = ({ user, setUser }:
             method: "POST",
             headers: myHeaders,
             body: JSON.stringify({
+                "ifscCode": "hdfc002",
                 "userRequest": {
                     "name": name,
                     "email": email
+                },
+                "bankRequest": {
+                    "id": 1
                 }
             }),
             redirect: "follow"

@@ -60,51 +60,12 @@ export async function createAccount(props: Props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "userRequest": {
-                    "name": name,
-                    "email": email
                 }
             })
         });
 
         const result = await response.json();
-        console.log("create account, result = ", result)
-
-        fetch(`${BASE_URL}/account/create`, {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify({
-                "userRequest": {
-                    "name": name,
-                    "email": email
-                }
-            }),
-            redirect: "follow"
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                if (result.responseStatusInt == 201) {
-                    if (result.responseData == null) {
-                        toast.error("Create account api does not return account detail")
-                        navigate('/welcome')
-                    }
-                    setUser({
-                        ...user,
-                        name: user?.name ?? "",
-                        email: user?.email ?? "",
-                        accountData: result?.responseData ?? null
-                    });
-                    toast.success("Bank account created successfully");
-                    navigate('/welcome')
-                } else if (result.responseStatusInt == 409) {
-                    toast.success("Account already exist");
-                } else {
-                    toast.error("Something went wrong");
-                }
-            })
-            .catch((error) => {
-                console.error("iternal server error: ", error);
-                toast.error("Internal server error");
-            });
+        console.log("create account, result = ", result);
     } catch (err) {
         console.error('deleteAccount error: ', err);
         toast.error('Internal server error');
