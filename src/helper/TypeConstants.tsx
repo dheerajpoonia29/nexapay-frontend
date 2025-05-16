@@ -11,7 +11,7 @@ export type User = {
 };
 
 export type Transaction = {
-    transactionId: number,
+    transferId: number,
     fromAccountNo: string,
     toAccountNo: string,
     amount: number,

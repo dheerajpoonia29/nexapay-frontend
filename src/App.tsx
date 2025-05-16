@@ -14,7 +14,6 @@ import TransferPage from './pages/TransferPage';
 import TransactionPage from './pages/TransactionPage';
 import CreateAccountPage from './pages/CreateAccountPage';
 import DeleteAccountPage from './pages/DeleteAccountPage';
-import DeleteAccountClient from './client/DeleteAccountClient';
 
 import Footer from './layout/Footer';
 import WelcomePageHeader from './layout/WelcomePageHeader';
@@ -55,7 +54,6 @@ function App() {
             <Route path="/create-account" element={<CreateAccountPage user={user} setUser={setUser} />} />
             <Route path="/banking" element={<BankingPage user={user} />} />
             <Route path="/banking/delete" element={<DeleteAccountPage user={user} setUser={setUser} />} />
-            {/* <Route path="/banking/delete" element={<DeleteAccountClient user={user} setUser={setUser} />} /> */}
             <Route path="/banking/transfer" element={<TransferPage user={user} setUser={setUser} />} />
             <Route path="/banking/transactions" element={
               <TransactionPage

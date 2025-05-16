@@ -6,14 +6,15 @@ interface Props {
     setUser: (val: User) => void;
 }
 
-// function DeleteAccountClient(props: Props) {
+const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
+
+// function deleteAccount(props: Props) {
 //   const { user, setUser } = props;
 // }
 
-const DeleteAccountClient = async ({ user, setUser }: Props) => {
-    console.log('inside DeleteAccountClient');
+const deleteAccount = async ({ user, setUser }: Props) => {
+    console.log('inside deleteAccount');
 
-    const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
     const ENDPOINT = '/account/delete-account';
     const URL = BASE_URL + ENDPOINT;
 
@@ -41,9 +42,9 @@ const DeleteAccountClient = async ({ user, setUser }: Props) => {
             toast.error("Internal server error");
         }
     } catch (err) {
-        console.error('DeleteAccountClient error: ', err);
+        console.error('deleteAccount error: ', err);
         toast.error('Internal server error');
     }
 };
 
-export default DeleteAccountClient;
+export default deleteAccount;

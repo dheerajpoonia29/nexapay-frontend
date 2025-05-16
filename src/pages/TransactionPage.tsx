@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import type { Transaction, User } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
-import FetchTransactionClient from '../client/FetchTransactionClient';
+import getTransactions from '../client/TransactionClient';
 
 const TransactionPage = ({
     user,
@@ -23,13 +23,13 @@ const TransactionPage = ({
     useEffect(() => {
         if (user?.accountData?.accountNo && !hasFetched) {
             setHasFetched(true)
-            FetchTransactionClient(user.accountData.accountNo, setTransactions);
+            getTransactions(user.accountData.accountNo, setTransactions);
         }
     }, [user]);
 
     const handleRefresh = () => {
         if (user?.accountData?.accountNo) {
-            FetchTransactionClient(user.accountData.accountNo, setTransactions);
+            getTransactions(user.accountData.accountNo, setTransactions);
         }
     };
 
@@ -68,7 +68,7 @@ const TransactionPage = ({
                                     const isSent = txn.fromAccountNo === user?.accountData?.accountNo;
                                     return (
                                         <tr
-                                            key={txn.transactionId}
+                                            key={txn.transferId}
                                             className="hover:bg-gray-50 transition-colors"
                                         >
                                             <td className="px-4 py-3 text-center">{idx + 1}</td>
@@ -80,7 +80,7 @@ const TransactionPage = ({
                                                 {isSent ? 'Sent' : 'Recieved'}
                                             </td>
                                             <td className="px-4 py-3">{isSent ? txn.toAccountNo : txn.fromAccountNo}</td>
-                                            <td className="px-4 py-3 text-xs break-all">{txn.transactionId}</td>
+                                            <td className="px-4 py-3 text-xs break-all">{txn.transferId}</td>
                                         </tr>
                                     );
                                 })}

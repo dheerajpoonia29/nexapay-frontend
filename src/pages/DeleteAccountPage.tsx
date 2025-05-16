@@ -1,7 +1,7 @@
 import type { User } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
-import DeleteAccountClient from '../client/DeleteAccountClient';
+import deleteAccount from '../client/AccountClient';
 
 const DeleteAccountPage = ({ user, setUser }:
     {
@@ -28,7 +28,7 @@ const DeleteAccountPage = ({ user, setUser }:
 
                 <div className="flex justify-center">
                     <button
-                        onClick={() => DeleteAccountClient({ user, setUser })}
+                        onClick={() => deleteAccount({ user, setUser })}
                         className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md transition duration-300"
                     >
                         Delete My Account

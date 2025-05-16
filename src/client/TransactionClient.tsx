@@ -1,16 +1,17 @@
 import { toast } from 'react-toastify';
 import type { Transaction } from '../helper/TypeConstants';
 
-const FetchTransactionClient = async (
+const BASE_URL = import.meta.env.VITE_API_BANK_API_URL;
+
+const getTransactions = async (
     accountNo: string,
     setTransactions: (val: Transaction[]) => void
 ) => {
-    console.log('inside FetchTransactionClient')
+    console.log('inside getTransactions')
 
-    const BASE_URL = import.meta.env.VITE_API_BANK_API_URL;
     const ENDPOINT = '/bank/get-transfers';
     const URL = BASE_URL + ENDPOINT;
-    
+
     try {
         const response = await fetch(`${URL}?accountNo=${accountNo}`, {
             method: 'GET',
@@ -35,4 +36,4 @@ const FetchTransactionClient = async (
     }
 };
 
-export default FetchTransactionClient;
+export default getTransactions;
