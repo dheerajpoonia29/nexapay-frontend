@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import type { UserType, UserFormDataType } from '../helper/TypeConstants';
+import type { UserType, AccountCreateFormDataType } from '../helper/TypeConstants';
 import { mapBackendUserToUserType } from "../helper/ResponseCreator";
 
 const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
@@ -47,7 +47,7 @@ export const deleteAccount = async ({ user, setUser }: Props): Promise<void> => 
 interface CreateAccountProps {
     user: UserType | null;
     setUser: (val: UserType) => void;
-    formData: UserFormDataType;
+    formData: AccountCreateFormDataType;
 }
 
 export const createAccount = async ({ user, setUser, formData }: CreateAccountProps): Promise<void> => {
@@ -61,15 +61,16 @@ export const createAccount = async ({ user, setUser, formData }: CreateAccountPr
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "ifscCode": "hdfc002",
+                "ifscCode": formData?.ifscCode,
                 "userRequest": {
-                    "name": formData.name,
-                    "email": formData.email
+                    "name": formData?.name,
+                    "email": formData?.email
                 },
                 "bankRequest": {
-                    "id": 1
+                    "id": formData?.bankId
                 }
             }),
+
             redirect: "follow"
         });
 
@@ -117,6 +118,7 @@ export const getAccount = async ({ user, setUser }: Props): Promise<boolean> => 
                 accountData: result?.responseData
             }));
             toast.info("Account balance updated");
+            return true;
         } else {
             console.error("status code: ", result.responseStatusInt);
             toast.error("Internal server error");

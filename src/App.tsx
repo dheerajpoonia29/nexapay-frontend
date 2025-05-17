@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -19,15 +19,27 @@ import Footer from './layout/Footer';
 import WelcomePageHeader from './layout/WelcomePageHeader';
 import HomePageHeader from './layout/HomePageHeader';
 
-import type { UserType, TransferType } from './helper/TypeConstants';
+import type { UserType, TransferType, BankType } from './helper/TypeConstants';
 
 import 'react-toastify/dist/ReactToastify.css';
+import { getBanks } from './client/BankClient';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<UserType | null>(null);
   const [transactions, setTransactions] = useState<TransferType[]>([]);
   const [hasFetched, setHasFetched] = useState(false);
+  const [banks, setBanks] = useState<BankType[] | null>(null);
+
+  useEffect(() => {
+    const fetchBanks = async () => {
+      console.log("fetching banks");
+      const banksList = await getBanks();
+      setBanks(banksList);
+    };
+
+    fetchBanks();
+  }, []);
 
   return (
     <BrowserRouter>
@@ -51,7 +63,7 @@ function App() {
             <Route path="/welcome" element={<WelcomePage user={user} />} />
             <Route path="/account" element={<AccountPage user={user} setUser={setUser} />} />
             <Route path="/logout" element={<LogoutPage setIsLoggedIn={setIsLoggedIn} />} />
-            <Route path="/create-account" element={<CreateAccountPage user={user} setUser={setUser} />} />
+            <Route path="/create-account" element={<CreateAccountPage user={user} setUser={setUser} banks={banks} />} />
             <Route path="/banking" element={<BankingPage user={user} />} />
             <Route path="/banking/delete" element={<DeleteAccountPage user={user} setUser={setUser} />} />
             <Route path="/banking/transfer" element={<TransferPage user={user} setUser={setUser} setTransactions={setTransactions} />} />

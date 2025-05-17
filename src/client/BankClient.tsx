@@ -19,7 +19,7 @@ export async function getBanks(): Promise<BankType[] | null> {
         console.log("get banks, result = ", result);
 
         if (result.responseStatusInt === 200) {
-            console.log("got banks");
+            console.log("get banks api call success");
             toast.info('Banks fetched successfully');
             return result.responseData as BankType[];
         } else {

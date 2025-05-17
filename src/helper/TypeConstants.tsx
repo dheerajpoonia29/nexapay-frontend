@@ -44,3 +44,10 @@ export type TransferFormDataType = {
     toAccountNo?: string,
     amount?: number
 };
+
+export type AccountCreateFormDataType = {
+    name?: string,
+    email?: string,
+    bankId?: number | null,
+    ifscCode?: string | null
+}

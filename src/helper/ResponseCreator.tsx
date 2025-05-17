@@ -4,10 +4,8 @@ export function mapBackendUserToUserType(userResponse: any): UserType {
     console.log('mapping userResponse with user', userResponse);
 
     const accountResponse: AccountType = userResponse?.accountData ?? null;
-    console.log('accountResponse', accountResponse);
 
     const bankResponse: BankType = userResponse?.accountData?.bankData ?? null;
-    console.log('bankResponse', bankResponse);
 
     return {
         name: userResponse?.name ?? "",

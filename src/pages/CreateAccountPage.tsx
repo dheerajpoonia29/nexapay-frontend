@@ -1,25 +1,47 @@
-import { useState } from 'react';
-import type { UserType } from '../helper/TypeConstants';
+import type { BranchType, AccountCreateFormDataType, BankType, UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import { useNavigate } from 'react-router-dom';
 import { createAccount } from '../client/AccountClient';
+import { useState } from 'react';
 
-const CreateAccountPage = ({ user, setUser }:
-    {
+interface Props {
         user: UserType | null;
-        setUser: (val: UserType) => void
-    }) => {
+        setUser: (val: UserType) => void;
+        banks: BankType[] | null;
+    }
+
+const CreateAccountPage = ({ user, setUser, banks }: Props) => {
     ValidateAuth(user, '/logout');
 
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
+    const [branches, setBranches] = useState<BranchType[] | null>(null);
+
+    const [formData, setFormData] = useState<AccountCreateFormDataType>({
         name: user?.name,
-        email: user?.email
+        email: user?.email ?? "",
+        bankId: null,
+        ifscCode: null
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+
+        if (name === "bankId") {
+            const bankId = value === "" ? null : Number(value);
+            const selectedBank = banks?.find(bank => bank.id === bankId);
+            setBranches(selectedBank?.branches ?? null);
+
+            setFormData((prev) => ({
+                ...prev,
+                [name]: bankId
+            }));
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     const myHeaders = new Headers();
@@ -44,8 +66,7 @@ const CreateAccountPage = ({ user, setUser }:
                             type="text"
                             name="name"
                             placeholder="ram sharma"
-                            value={formData.name}
-                            onChange={handleChange}
+                            value={user?.name}
                             required
                             disabled
                             className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -55,15 +76,50 @@ const CreateAccountPage = ({ user, setUser }:
                         <label htmlFor="email" className="block font-semibold mb-1">Email</label>
                         <input
                             id="email"
-                            type="email"
                             name="email"
+                            type="email"
                             placeholder="you@example.com"
                             value={formData.email}
-                            onChange={handleChange}
                             required
                             disabled
                             className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         />
+                    </div>
+                    <div>
+                        <label htmlFor="bank" className="block font-semibold mb-1">Select Bank</label>
+                        <select
+                            id="bankId"
+                            name="bankId"
+                            value={formData.bankId ?? ''}
+                            onChange={handleChange}
+                            required
+                            className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        >
+                            <option value="">Select a Bank</option>
+                            {banks?.map((bank) => (
+                                <option key={bank.id} value={bank.id}>
+                                    {bank.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="bank" className="block font-semibold mb-1">Select Branch</label>
+                        <select
+                            id="ifscCode"
+                            name="ifscCode"
+                            value={formData.ifscCode ?? ''}
+                            onChange={handleChange}
+                            required
+                            className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        >
+                            <option value="">Select a Branch</option>
+                            {branches?.map((branch) => (
+                                <option key={branch.ifscCode} value={branch.ifscCode}>
+                                    {branch.branchName} ({branch.ifscCode})
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <button
                         type="submit"
