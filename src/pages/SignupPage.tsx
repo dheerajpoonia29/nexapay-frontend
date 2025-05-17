@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { signupUser } from "../client/UserClient";
 
 const SignupPage = () => {
     const navigate = useNavigate();
@@ -15,36 +15,15 @@ const SignupPage = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
-
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log("Signup Data:", formData);
 
-        fetch(`${BASE_URL}/auth/signup`, {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify(formData),
-            redirect: "follow"
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                if (result.responseStatusInt == 201) {
-                    toast.success("Account created successfully.")
-                    navigate('/login')
-                } else if (result.responseStatusInt == 409) {
-                    toast.warn("Account already exsit.")
-                } else {
-                    toast.error("something went wrong");
-                }
-            })
-            .catch((error) => {
-                console.error("iternal server error: ", error);
-                toast.error("Internal server error");
-            });
+        const result = await signupUser({ formData });
+        if (result) navigate('/login');
     };
 
     return (

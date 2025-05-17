@@ -6,7 +6,7 @@ const BASE_URL = import.meta.env.VITE_API_BANK_API_URL;
 export const getTransactions = async (
     accountNo: string,
     setTransactions: (val: TransferType[]) => void
-) => {
+): Promise<void> => {
     console.log('inside getTransactions')
 
     const ENDPOINT = '/bank/get-transfers';

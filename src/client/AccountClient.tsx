@@ -9,7 +9,7 @@ interface DeleteAccountProps {
     setUser: (val: UserType) => void;
 }
 
-export const deleteAccount = async ({ user, setUser }: DeleteAccountProps) => {
+export const deleteAccount = async ({ user, setUser }: DeleteAccountProps): Promise<void> => {
     console.log('inside deleteAccount client');
 
     const ENDPOINT = '/account/delete-account';

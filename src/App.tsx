@@ -46,7 +46,7 @@ function App() {
         <div className="flex-grow">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} user={user} setUser={setUser} />} />
+            <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/welcome" element={<WelcomePage user={user} />} />
             <Route path="/account" element={<AccountPage user={user} />} />

@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { UserType } from "../helper/TypeConstants";
-import { toast } from "react-toastify";
-import { mapBackendUserToUserType } from "../helper/ResponseCreator";
+import { loginUser } from "../client/UserClient";
 
-const LoginPage = ({ setIsLoggedIn, user, setUser }:
+const LoginPage = ({ setIsLoggedIn, setUser }:
     {
         setIsLoggedIn: (val: boolean) => void;
-        user: UserType | null;
         setUser: (val: UserType) => void
     }) => {
     const navigate = useNavigate();
@@ -22,43 +20,12 @@ const LoginPage = ({ setIsLoggedIn, user, setUser }:
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log("login data:", formData);
-
-        fetch(`${BASE_URL}/auth/login`, {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify(formData),
-            redirect: "follow"
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                console.log("login, result: ", result);
-                if (result?.responseStatusInt == 200) {
-                    console.log("login success");
-                    if (result.responseData == null) {
-                        toast.error("Login failed");
-                        navigate('/login')
-                    }
-                    setUser(result?.responseData);
-                    const response = result?.responseData;
-                    setUser(mapBackendUserToUserType(response));
-                    console.log("user state, ", user);
-                    toast.success("Login success");
-                    setIsLoggedIn(true);
-                    navigate('/welcome');
-                } else {
-                    console.error("login failed, invalid authentication");
-                    toast.warn("Login failed, invalid authentication!");
-                }
-            })
-            .catch((error) => {
-                console.error("login failed, error: ", error)
-                toast.error("Login failed");
-            });
+        const result = await loginUser({ setIsLoggedIn, setUser, formData });
+        if (result) navigate('/welcome');
+        else navigate('/');
     };
 
     const myHeaders = new Headers();
