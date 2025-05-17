@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import type { UserType, UserFormDataType } from '../helper/TypeConstants';
+import { mapBackendUserToUserType } from "../helper/ResponseCreator";
 
 const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
 
@@ -9,13 +10,13 @@ interface DeleteAccountProps {
 }
 
 export const deleteAccount = async ({ user, setUser }: DeleteAccountProps) => {
-    console.log('inside deleteAccount');
+    console.log('inside deleteAccount client');
 
     const ENDPOINT = '/account/delete-account';
     const URL = BASE_URL + ENDPOINT;
 
     try {
-        const response = await fetch(`${URL}?accountNo=${user?.accountData?.accountNo}`, {
+        const response = await fetch(`${URL}?accountNo=${user?.account?.accountNo}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -28,7 +29,7 @@ export const deleteAccount = async ({ user, setUser }: DeleteAccountProps) => {
                 ...user!,
                 name: user?.name ?? "",
                 email: user?.email ?? "",
-                accountData: null
+                account: null
             });
             toast.success("Account deleted successfully.");
         } else if (result.responseStatusInt === 404) {
@@ -49,8 +50,8 @@ interface CreateAccountProps {
     formData: UserFormDataType;
 }
 
-export const createAccount = async ({ user, setUser, formData }: CreateAccountProps) => {
-    console.log('inside createAccount');
+export const createAccount = async ({ user, setUser, formData }: CreateAccountProps): Promise<void> => {
+    console.log('inside createAccount client');
 
     const ENDPOINT = '/account/create';
     const URL = BASE_URL + ENDPOINT;
@@ -76,12 +77,10 @@ export const createAccount = async ({ user, setUser, formData }: CreateAccountPr
         console.log("create account, result = ", result)
 
         if (result.responseStatusInt === 201) {
-            setUser({
+            setUser(mapBackendUserToUserType({
                 ...user,
-                name: user?.name ?? "",
-                email: user?.email ?? "",
-                accountData: result?.responseData ?? null
-            });
+                accountData: result?.responseData
+            }));
             toast.success("Account created successfully.");
         } else if (result.responseStatusInt === 409) {
             toast.warn("Account already exist.");
@@ -90,7 +89,7 @@ export const createAccount = async ({ user, setUser, formData }: CreateAccountPr
             toast.error("Internal server error");
         }
     } catch (err) {
-        console.error('deleteAccount error: ', err);
+        console.error('createAccount error: ', err);
         toast.error('Internal server error');
     }
 }

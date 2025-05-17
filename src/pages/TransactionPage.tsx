@@ -21,15 +21,15 @@ const TransactionPage = ({
     ValidateAccount(user, '/welcome');
 
     useEffect(() => {
-        if (user?.accountData?.accountNo && !hasFetched) {
+        if (user?.account?.accountNo && !hasFetched) {
             setHasFetched(true)
-            getTransactions(user.accountData.accountNo, setTransactions);
+            getTransactions(user.account.accountNo, setTransactions);
         }
     }, [user]);
 
     const handleRefresh = () => {
-        if (user?.accountData?.accountNo) {
-            getTransactions(user.accountData.accountNo, setTransactions);
+        if (user?.account?.accountNo) {
+            getTransactions(user.account.accountNo, setTransactions);
         }
     };
 
@@ -65,7 +65,7 @@ const TransactionPage = ({
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {transactions.map((txn, idx) => {
-                                    const isSent = txn.fromAccountNo === user?.accountData?.accountNo;
+                                    const isSent = txn.fromAccountNo === user?.account?.accountNo;
                                     return (
                                         <tr
                                             key={txn.transferId}

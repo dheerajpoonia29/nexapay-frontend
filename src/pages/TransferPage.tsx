@@ -13,7 +13,7 @@ const FetchAndUpdateTransaction = (user: UserType | null, setUser: (val: UserTyp
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    fetch(`${BASE_URL}/account/get-by-account-no?accountNo=${user?.accountData?.accountNo}`, {
+    fetch(`${BASE_URL}/account/get-by-account-no?accountNo=${user?.account?.accountNo}`, {
         method: "GET",
         headers: myHeaders,
         redirect: "follow"
@@ -27,7 +27,7 @@ const FetchAndUpdateTransaction = (user: UserType | null, setUser: (val: UserTyp
                     ...user,
                     name: user?.name ?? "",
                     email: user?.email ?? "",
-                    accountData: result.responseData
+                    account: result.responseData
                 };
                 setUser(updatedUser);
                 toast.info("User account updated");
@@ -52,7 +52,7 @@ const TransferPage = ({ user, setUser }: {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        fromAccountNo: user?.accountData?.accountNo,
+        fromAccountNo: user?.account?.accountNo,
         toAccountNo: "",
         amount: 0
     });
@@ -69,7 +69,7 @@ const TransferPage = ({ user, setUser }: {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!user?.accountData?.accountNo) {
+        if (!user?.account?.accountNo) {
             toast.error("You don't have a valid source account.");
             return;
         }

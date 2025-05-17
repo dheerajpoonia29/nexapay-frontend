@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { UserType } from "../helper/TypeConstants";
 import { toast } from "react-toastify";
+import { mapBackendUserToUserType } from "../helper/ResponseCreator";
 
-const LoginPage = ({ setIsLoggedIn, setUser }:
+const LoginPage = ({ setIsLoggedIn, user, setUser }:
     {
         setIsLoggedIn: (val: boolean) => void;
+        user: UserType | null;
         setUser: (val: UserType) => void
     }) => {
     const navigate = useNavigate();
@@ -15,6 +17,7 @@ const LoginPage = ({ setIsLoggedIn, setUser }:
         password: ""
     });
 
+    // todo make other handleChange like this
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -41,6 +44,9 @@ const LoginPage = ({ setIsLoggedIn, setUser }:
                         navigate('/login')
                     }
                     setUser(result?.responseData);
+                    const response = result?.responseData;
+                    setUser(mapBackendUserToUserType(response));
+                    console.log("user state, ", user);
                     toast.success("Login success");
                     setIsLoggedIn(true);
                     navigate('/welcome');

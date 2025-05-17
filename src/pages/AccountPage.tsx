@@ -1,8 +1,14 @@
+import { useEffect } from 'react';
 import type { UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
+import ValidateAccount from '../helper/ValidateAccount';
 
 const AccountPage = ({ user }: { user: UserType | null }) => {
     ValidateAuth(user, '/logout');
+    ValidateAccount(user, '/welcome');
+
+    useEffect(() => {
+    }, [user]);
 
     return (
         <div className="flex items-center justify-center min-h-[80vh] bg-gray-100 px-4">
@@ -34,16 +40,16 @@ const AccountPage = ({ user }: { user: UserType | null }) => {
                         <h3 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">
                             Account Information
                         </h3>
-                        {user?.accountData != null ? (
+                        {user?.account != null ? (
                             <div className="space-y-3">
                                 <div>
                                     <label className="block text-sm text-gray-500">Account Number</label>
-                                    <p className="text-lg font-medium">{user?.accountData?.accountNo}</p>
+                                    <p className="text-lg font-medium">{user?.account?.accountNo}</p>
                                 </div>
                                 <div>
                                     <label className="block text-sm text-gray-500">Balance</label>
                                     {/* todo timely update account balance, can we make this cron job ?? */}
-                                    <p className="text-lg font-medium">₹ {user?.accountData?.balance}</p>
+                                    <p className="text-lg font-medium">₹ {user?.account?.balance}</p>
                                 </div>
                             </div>
                         ) : (<></>)}
@@ -54,16 +60,17 @@ const AccountPage = ({ user }: { user: UserType | null }) => {
                         <h3 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">
                             Bank Information
                         </h3>
-                        {user?.accountData != null ? (
-                            <div className="space-y-3">
+                        {user?.account != null ? (
+                            <div className="space-y-3"> 
+                            
                                 <div>
-                                    <label className="block text-sm text-gray-500">Account Number</label>
-                                    <p className="text-lg font-medium">{user?.accountData?.accountNo}</p>
+                                    <label className="block text-sm text-gray-500">Bank Name</label>
+                                    <p className="text-lg font-medium">{user?.account?.bank?.name}</p>
                                 </div>
                                 <div>
                                     <label className="block text-sm text-gray-500">Balance</label>
                                     {/* todo timely update account balance, can we make this cron job ?? */}
-                                    <p className="text-lg font-medium">₹ {user?.accountData?.balance}</p>
+                                    <p className="text-lg font-medium">{user?.account?.bank?.branch}</p>
                                 </div>
                             </div>
                         ) : (<></>)}

@@ -25,10 +25,10 @@ const CreateAccountPage = ({ user, setUser }:
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log('calling create account client, formData', formData);
-        createAccount({ user, setUser, formData });
+        await createAccount({ user, setUser, formData });
         navigate('/welcome');
     };
 

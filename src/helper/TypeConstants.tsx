@@ -1,7 +1,7 @@
 export type UserType = {
     name: string;
     email: string;
-    accountData: AccountType | null;
+    account: AccountType | null;
 };
 
 export type BranchType = {
@@ -12,15 +12,15 @@ export type BranchType = {
 export type BankType = {
     id: number,
     name: string,
-    branches: BranchType[]
+    branches: BranchType[],
+    branch: String
 };
 
 export type AccountType = {
     accountNo: string,
     balance: number,
     ifscCode: string,
-    user: UserType,
-    bank: BankType
+    bank: BankType | null
 };
 
 export type TransferType = {
@@ -34,7 +34,7 @@ export type TransferType = {
 };
 
 export type UserFormDataType = {
-  name?: string;
-  email?: string;
-  password?: string;
+    name?: string;
+    email?: string;
+    password?: string;
 };
