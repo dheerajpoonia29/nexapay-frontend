@@ -1,10 +1,14 @@
 import { useEffect } from 'react';
 import type { UserType } from '../helper/TypeConstants';
-import ValidateAuth from '../helper/ValidateAuth';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const WelcomePage = ({ user }: { user: UserType | null }) => {
-    ValidateAuth(user, '/logout');
+   const navigate = useNavigate();
+    if (user == null) {
+        toast.warn("User not found, logging out!!");
+        navigate('/logout');
+    }
 
     useEffect(() => {
 

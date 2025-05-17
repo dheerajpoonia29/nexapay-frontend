@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import type { TransferType, UserType } from '../helper/TypeConstants';
-import ValidateAuth from '../helper/ValidateAuth';
-import ValidateAccount from '../helper/ValidateAccount';
 import { getTransfers } from '../client/TransferClient';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const TransactionPage = ({
     user,
@@ -12,13 +12,20 @@ const TransactionPage = ({
     setHasFetched
 }: {
     user: UserType | null;
-    transactions: TransferType[];
+    transactions: TransferType[] | null;
     setTransactions: (val: TransferType[]) => void;
     hasFetched: boolean;
     setHasFetched: (val: boolean) => void;
 }) => {
-    ValidateAuth(user, '/logout');
-    ValidateAccount(user, '/welcome');
+    const navigate = useNavigate();
+    if (user == null) {
+        toast.warn("User not found, logging out!!");
+        navigate('/logout');
+    }
+    if (user?.account == null) {
+        toast.warn("Account not created yet!!");
+        navigate('/welcome');
+    }
 
     useEffect(() => {
         if (user?.account?.accountNo && !hasFetched) {
@@ -48,7 +55,7 @@ const TransactionPage = ({
                     </button>
                 </div>
 
-                {transactions.length === 0 ? (
+                {transactions?.length === 0 ? (
                     <p className="text-center text-lg text-gray-500">No transactions found.</p>
                 ) : (
                     <div className="overflow-x-auto rounded-lg shadow-inner max-h-[450px] overflow-y-auto">
@@ -64,7 +71,7 @@ const TransactionPage = ({
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                                {transactions.map((txn, idx) => {
+                                {transactions?.map((txn, idx) => {
                                     const isSent = txn.fromAccountNo === user?.account?.accountNo;
                                     return (
                                         <tr

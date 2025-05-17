@@ -1,19 +1,24 @@
-import { useEffect } from 'react';
 import type { UserType } from '../helper/TypeConstants';
-import ValidateAuth from '../helper/ValidateAuth';
-import ValidateAccount from '../helper/ValidateAccount';
 import { getAccount } from '../client/AccountClient';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const AccountPage = ({ user, setUser }: { user: UserType | null; setUser: (val: UserType) => void }) => {
-    ValidateAuth(user, '/logout');
-    ValidateAccount(user, '/welcome');
-
-    useEffect(() => {
-    }, [user]);
+    const navigate = useNavigate();
+    if (user == null) {
+        toast.warn("User not found, logging out!!");
+        navigate('/logout');
+    }
+    if (user?.account == null) {
+        toast.warn("Account not created yet!!");
+        navigate('/welcome');
+    }
 
     const handleReloadBalance = async () => {
         await getAccount({ user, setUser });
     }
+
+    console.log('user account page', user);
 
     return (
         <div className="flex items-center justify-center min-h-[80vh] bg-gray-100 px-4">
@@ -81,7 +86,7 @@ const AccountPage = ({ user, setUser }: { user: UserType | null; setUser: (val: 
                                     <p className="text-lg font-medium">{user?.account?.bank?.name}</p>
                                 </div>
                                 <div>
-                                    <label className="block text-sm text-gray-500">Balance</label>
+                                    <label className="block text-sm text-gray-500">Branch</label>
                                     {/* todo timely update account balance, can we make this cron job ?? */}
                                     <p className="text-lg font-medium">{user?.account?.bank?.branch}</p>
                                 </div>

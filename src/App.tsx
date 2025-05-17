@@ -1,7 +1,6 @@
 import './App.css'
 import { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage';
@@ -23,11 +22,12 @@ import type { UserType, TransferType, BankType } from './helper/TypeConstants';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { getBanks } from './client/BankClient';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<UserType | null>(null);
-  const [transactions, setTransactions] = useState<TransferType[]>([]);
+  const [transactions, setTransactions] = useState<TransferType[] | null>([]);
   const [hasFetched, setHasFetched] = useState(false);
   const [banks, setBanks] = useState<BankType[] | null>(null);
 
@@ -40,6 +40,10 @@ function App() {
 
     fetchBanks();
   }, []);
+
+  useEffect(() => {
+    console.log("something changes");
+  }, [setIsLoggedIn]);
 
   return (
     <BrowserRouter>

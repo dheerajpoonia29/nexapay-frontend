@@ -1,16 +1,22 @@
 import type { UserType } from '../helper/TypeConstants';
-import ValidateAuth from '../helper/ValidateAuth';
-import ValidateAccount from '../helper/ValidateAccount';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { toast } from 'react-toastify';
 
 
 const BankingPage = ({ user }:
     {
         user: UserType | null;
     }) => {
-    ValidateAuth(user, '/logout');
-    ValidateAccount(user, '/welcome');
+    const navigate = useNavigate();
+    if (user == null) {
+        toast.warn("User not found, logging out!!");
+        navigate('/logout');
+    }
+    if (user?.account == null) {
+        toast.warn("Account not created yet!!");
+        navigate('/welcome');
+    }
 
     const bankingOptions = [
         // { label: "Deposit", route: "/banking/deposit" },

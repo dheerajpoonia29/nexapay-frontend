@@ -1,20 +1,22 @@
 import type { UserType } from '../helper/TypeConstants';
 import { useNavigate } from 'react-router-dom';
-import ValidateAuth from '../helper/ValidateAuth';
-import ValidateAccount from '../helper/ValidateAccount';
 import { deleteAccount } from '../client/AccountClient';
+import { toast } from 'react-toastify';
 
 const DeleteAccountPage = ({ user, setUser }:
     {
         user: UserType | null;
         setUser: (val: UserType) => void
     }) => {
-    console.log("inside DeleteAccountPage")
-
-    ValidateAuth(user, '/logout');
-    ValidateAccount(user, '/welcome');
-
     const navigate = useNavigate();
+    if (user == null) {
+        toast.warn("User not found, logging out!!");
+        navigate('/logout');
+    }
+    if (user?.account == null) {
+        toast.warn("Account not created yet!!");
+        navigate('/welcome');
+    }
 
     const handleSubmit = () => {
         console.log('calling delete account client');

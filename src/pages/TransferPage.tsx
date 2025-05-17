@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import type { UserType, TransferFormDataType, TransferType } from '../helper/TypeConstants';
-import ValidateAuth from '../helper/ValidateAuth';
-import ValidateAccount from '../helper/ValidateAccount';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getTransfers, sendTransfers } from '../client/TransferClient';
@@ -11,10 +9,15 @@ const TransferPage = ({ user, setUser, setTransactions }: {
     setUser: (val: UserType) => void;
     setTransactions: (val: TransferType[]) => void;
 }) => {
-    ValidateAuth(user, '/logout');
-    ValidateAccount(user, '/welcome');
-
     const navigate = useNavigate();
+    if (user == null) {
+        toast.warn("User not found, logging out!!");
+        navigate('/logout');
+    }
+    if (user?.account == null) {
+        toast.warn("Account not created yet!!");
+        navigate('/welcome');
+    }
 
     const [formData, setFormData] = useState<TransferFormDataType>({
         fromAccountNo: user?.account?.accountNo,

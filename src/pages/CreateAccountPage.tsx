@@ -1,19 +1,21 @@
 import type { BranchType, AccountCreateFormDataType, BankType, UserType } from '../helper/TypeConstants';
-import ValidateAuth from '../helper/ValidateAuth';
 import { useNavigate } from 'react-router-dom';
 import { createAccount } from '../client/AccountClient';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface Props {
-        user: UserType | null;
-        setUser: (val: UserType) => void;
-        banks: BankType[] | null;
-    }
+    user: UserType | null;
+    setUser: (val: UserType) => void;
+    banks: BankType[] | null;
+}
 
 const CreateAccountPage = ({ user, setUser, banks }: Props) => {
-    ValidateAuth(user, '/logout');
-
     const navigate = useNavigate();
+    if (user == null) {
+        toast.warn("User not found, logging out!!");
+        navigate('/logout');
+    }
 
     const [branches, setBranches] = useState<BranchType[] | null>(null);
 
