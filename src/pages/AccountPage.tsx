@@ -2,13 +2,18 @@ import { useEffect } from 'react';
 import type { UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
+import { getAccount } from '../client/AccountClient';
 
-const AccountPage = ({ user }: { user: UserType | null }) => {
+const AccountPage = ({ user, setUser }: { user: UserType | null; setUser: (val: UserType) => void }) => {
     ValidateAuth(user, '/logout');
     ValidateAccount(user, '/welcome');
 
     useEffect(() => {
     }, [user]);
+
+    const handleReloadBalance = async () => {
+        await getAccount({ user, setUser });
+    }
 
     return (
         <div className="flex items-center justify-center min-h-[80vh] bg-gray-100 px-4">
@@ -48,8 +53,16 @@ const AccountPage = ({ user }: { user: UserType | null }) => {
                                 </div>
                                 <div>
                                     <label className="block text-sm text-gray-500">Balance</label>
-                                    {/* todo timely update account balance, can we make this cron job ?? */}
-                                    <p className="text-lg font-medium">₹ {user?.account?.balance}</p>
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-lg font-medium">₹ {user?.account?.balance}</p>
+                                        <button
+                                            onClick={handleReloadBalance}
+                                            className="text-blue-500 hover:underline text-sm"
+                                            title="Reload Balance"
+                                        >
+                                            🔄
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ) : (<></>)}
@@ -61,8 +74,8 @@ const AccountPage = ({ user }: { user: UserType | null }) => {
                             Bank Information
                         </h3>
                         {user?.account != null ? (
-                            <div className="space-y-3"> 
-                            
+                            <div className="space-y-3">
+
                                 <div>
                                     <label className="block text-sm text-gray-500">Bank Name</label>
                                     <p className="text-lg font-medium">{user?.account?.bank?.name}</p>

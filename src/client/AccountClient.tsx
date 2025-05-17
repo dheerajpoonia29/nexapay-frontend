@@ -116,7 +116,7 @@ export const getAccount = async ({ user, setUser }: Props): Promise<boolean> => 
                 ...user,
                 accountData: result?.responseData
             }));
-            toast.info("User account updated");
+            toast.info("Account balance updated");
         } else {
             console.error("status code: ", result.responseStatusInt);
             toast.error("Internal server error");
