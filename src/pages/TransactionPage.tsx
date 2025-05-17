@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import type { TransferType, UserType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
-import { getTransactions } from '../client/TransactionClient';
+import { getTransfers } from '../client/TransferClient';
 
 const TransactionPage = ({
     user,
@@ -23,13 +23,13 @@ const TransactionPage = ({
     useEffect(() => {
         if (user?.account?.accountNo && !hasFetched) {
             setHasFetched(true)
-            getTransactions(user.account.accountNo, setTransactions);
+            getTransfers({ accountNo: user?.account?.accountNo ?? "", setTransactions });
         }
     }, [user]);
 
     const handleRefresh = () => {
         if (user?.account?.accountNo) {
-            getTransactions(user.account.accountNo, setTransactions);
+            getTransfers({ accountNo: user?.account?.accountNo ?? "", setTransactions });
         }
     };
 
@@ -58,9 +58,9 @@ const TransactionPage = ({
                                     <th className="px-4 py-3 font-semibold">S.No</th>
                                     <th className="px-4 py-3 font-semibold">Date</th>
                                     <th className="px-4 py-3 font-semibold">Amount (₹)</th>
-                                    <th className="px-4 py-3 font-semibold">Credit/Debit</th>
+                                    <th className="px-4 py-3 font-semibold">Transfer Type</th>
                                     <th className="px-4 py-3 font-semibold">Account No</th>
-                                    <th className="px-4 py-3 font-semibold">Transfer ID</th>
+                                    <th className="px-4 py-3 font-semibold">Transaction ID</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
@@ -77,10 +77,10 @@ const TransactionPage = ({
                                             </td>
                                             <td className="px-4 py-3 font-medium">₹ {txn.amount}</td>
                                             <td className={`px-4 py-3 ${isSent ? 'text-red-600' : 'text-green-600'}`}>
-                                                {isSent ? 'Sent' : 'Recieved'}
+                                                {isSent ? 'Debit' : 'Credit'}
                                             </td>
                                             <td className="px-4 py-3">{isSent ? txn.toAccountNo : txn.fromAccountNo}</td>
-                                            <td className="px-4 py-3 text-xs break-all">{txn.transferId}</td>
+                                            <td className="px-4 py-3">{txn.transferId}</td>
                                         </tr>
                                     );
                                 })}

@@ -1,57 +1,22 @@
 import { useState } from 'react';
-import type { UserType, TransferType } from '../helper/TypeConstants';
+import type { UserType, TransferFormDataType, TransferType } from '../helper/TypeConstants';
 import ValidateAuth from '../helper/ValidateAuth';
 import ValidateAccount from '../helper/ValidateAccount';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { getTransfers, sendTransfers } from '../client/TransferClient';
 
-const FetchAndUpdateTransaction = (user: UserType | null, setUser: (val: UserType) => void) => {
-    console.log("fetching user information");
-
-    const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
-
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    fetch(`${BASE_URL}/account/get-by-account-no?accountNo=${user?.account?.accountNo}`, {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow"
-    })
-        .then(res => res.json())
-        .then(result => {
-            console.log("api call success");
-            if (result.responseStatusInt === 200) {
-                console.log("success api call");
-                const updatedUser = {
-                    ...user,
-                    name: user?.name ?? "",
-                    email: user?.email ?? "",
-                    account: result.responseData
-                };
-                setUser(updatedUser);
-                toast.info("User account updated");
-            } else {
-                console.warn("Failed to fetch updated account info");
-                toast.warn("Failed to fetch updated account info");
-            }
-        })
-        .catch(err => {
-            console.error("Error updating transaction/account: ", err);
-            toast.error("Failed to fetch updated account info");
-        });
-};
-
-const TransferPage = ({ user, setUser }: {
+const TransferPage = ({ user, setUser, setTransactions }: {
     user: UserType | null;
     setUser: (val: UserType) => void;
+    setTransactions: (val: TransferType[]) => void;
 }) => {
     ValidateAuth(user, '/logout');
     ValidateAccount(user, '/welcome');
 
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<TransferFormDataType>({
         fromAccountNo: user?.account?.accountNo,
         toAccountNo: "",
         amount: 0
@@ -61,12 +26,10 @@ const TransferPage = ({ user, setUser }: {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const BASE_URL = import.meta.env.VITE_API_BANK_API_URL;
-
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!user?.account?.accountNo) {
@@ -74,35 +37,12 @@ const TransferPage = ({ user, setUser }: {
             return;
         }
 
-        fetch(`${BASE_URL}/bank/transfer`, {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify(formData),
-            redirect: "follow"
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                if (result.responseStatusInt === 201) {
-                    const responseData: TransferType = result.responseData;
-                    if (responseData.status == true) {
-                        toast.success("Transfer successful!");
-                        // todo fetch account again
-                        FetchAndUpdateTransaction(user, setUser);
-                        // todo send some prop so that transaction auto refresh
-                        navigate('/banking/transactions');
-                    } else {
-                        toast.warn(responseData.statusInfo);
-                    }
-                } else if (result.responseStatusInt === 404) {
-                    toast.warn("Account not found");
-                } else {
-                    toast.error("Transfer failed");
-                }
-            })
-            .catch((error) => {
-                console.error("Internal server error: ", error);
-                toast.error("Internal server error");
-            });
+        const result: boolean = await sendTransfers({ user, setUser, formData });
+        if (result) {
+            // await getTransfers({ user, setUser });
+            getTransfers({ accountNo: user?.account.accountNo, setTransactions });
+            navigate('/banking/transactions');
+        }
     };
 
     return (

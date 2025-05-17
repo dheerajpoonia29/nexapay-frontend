@@ -54,7 +54,7 @@ function App() {
             <Route path="/create-account" element={<CreateAccountPage user={user} setUser={setUser} />} />
             <Route path="/banking" element={<BankingPage user={user} />} />
             <Route path="/banking/delete" element={<DeleteAccountPage user={user} setUser={setUser} />} />
-            <Route path="/banking/transfer" element={<TransferPage user={user} setUser={setUser} />} />
+            <Route path="/banking/transfer" element={<TransferPage user={user} setUser={setUser} setTransactions={setTransactions} />} />
             <Route path="/banking/transactions" element={
               <TransactionPage
                 user={user}

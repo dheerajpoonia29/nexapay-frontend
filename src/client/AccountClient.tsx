@@ -4,12 +4,12 @@ import { mapBackendUserToUserType } from "../helper/ResponseCreator";
 
 const BASE_URL = import.meta.env.VITE_API_USER_AND_ACCOUNT_API_URL;
 
-interface DeleteAccountProps {
+interface Props {
     user: UserType | null;
     setUser: (val: UserType) => void;
 }
 
-export const deleteAccount = async ({ user, setUser }: DeleteAccountProps): Promise<void> => {
+export const deleteAccount = async ({ user, setUser }: Props): Promise<void> => {
     console.log('inside deleteAccount client');
 
     const ENDPOINT = '/account/delete-account';
@@ -92,4 +92,39 @@ export const createAccount = async ({ user, setUser, formData }: CreateAccountPr
         console.error('createAccount error: ', err);
         toast.error('Internal server error');
     }
+}
+
+export const getAccount = async ({ user, setUser }: Props): Promise<boolean> => {
+    console.log('inside getAccount client');
+
+    const ENDPOINT = `/account/get-by-account-no?accountNo=${user?.account?.accountNo}`;
+    const URL = BASE_URL + ENDPOINT;
+
+    try {
+        const response = await fetch(URL, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            redirect: "follow"
+        });
+
+        const result = await response.json();
+        console.log("get getAccount, result = ", result)
+
+        if (result.responseStatusInt === 200) {
+            console.log("success api call");
+            setUser(mapBackendUserToUserType({
+                ...user,
+                accountData: result?.responseData
+            }));
+            toast.info("User account updated");
+        } else {
+            console.error("status code: ", result.responseStatusInt);
+            toast.error("Internal server error");
+        }
+    } catch (err) {
+        console.error('tranferAmount error: ', err);
+        toast.error('Internal server error');
+    }
+
+    return false;
 }

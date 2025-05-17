@@ -38,3 +38,9 @@ export type UserFormDataType = {
     email?: string;
     password?: string;
 };
+
+export type TransferFormDataType = {
+    fromAccountNo?: string,
+    toAccountNo?: string,
+    amount?: number
+};
