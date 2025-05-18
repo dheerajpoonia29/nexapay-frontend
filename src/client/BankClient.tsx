@@ -4,7 +4,7 @@ import type { BankType } from '../helper/TypeConstants';
 const BASE_URL = import.meta.env.VITE_API_BANK_API_URL;
 
 export async function getBanks(): Promise<BankType[] | null> {
-    console.log('inside getBanks')
+    console.log('inside getBanks');
 
     const ENDPOINT = '/bank/get-all';
     const URL = BASE_URL + ENDPOINT;

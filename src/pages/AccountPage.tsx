@@ -2,17 +2,19 @@ import type { UserType } from '../helper/TypeConstants';
 import { getAccount } from '../client/AccountClient';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 const AccountPage = ({ user, setUser }: { user: UserType | null; setUser: (val: UserType) => void }) => {
     const navigate = useNavigate();
-    if (user == null) {
-        toast.warn("User not found, logging out!!");
-        navigate('/logout');
-    }
-    if (user?.account == null) {
-        toast.warn("Account not created yet!!");
-        navigate('/welcome');
-    }
+    useEffect(() => {
+        if (user == null) {
+            toast.warn("User not found, logging out!!");
+            navigate('/logout');
+        } else if (user.account == null) {
+            toast.warn("Account not created yet!!");
+            navigate('/welcome');
+        }
+    }, [user, navigate]);
 
     const handleReloadBalance = async () => {
         await getAccount({ user, setUser });

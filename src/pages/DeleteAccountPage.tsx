@@ -2,6 +2,7 @@ import type { UserType } from '../helper/TypeConstants';
 import { useNavigate } from 'react-router-dom';
 import { deleteAccount } from '../client/AccountClient';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 const DeleteAccountPage = ({ user, setUser }:
     {
@@ -9,14 +10,15 @@ const DeleteAccountPage = ({ user, setUser }:
         setUser: (val: UserType) => void
     }) => {
     const navigate = useNavigate();
-    if (user == null) {
-        toast.warn("User not found, logging out!!");
-        navigate('/logout');
-    }
-    if (user?.account == null) {
-        toast.warn("Account not created yet!!");
-        navigate('/welcome');
-    }
+    useEffect(() => {
+        if (user == null) {
+            toast.warn("User not found, logging out!!");
+            navigate('/logout');
+        } else if (user.account == null) {
+            toast.warn("Account not created yet!!");
+            navigate('/welcome');
+        }
+    }, [user, navigate]);
 
     const handleSubmit = () => {
         console.log('calling delete account client');

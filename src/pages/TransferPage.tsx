@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { UserType, TransferFormDataType, TransferType } from '../helper/TypeConstants';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -10,14 +10,15 @@ const TransferPage = ({ user, setUser, setTransactions }: {
     setTransactions: (val: TransferType[]) => void;
 }) => {
     const navigate = useNavigate();
-    if (user == null) {
-        toast.warn("User not found, logging out!!");
-        navigate('/logout');
-    }
-    if (user?.account == null) {
-        toast.warn("Account not created yet!!");
-        navigate('/welcome');
-    }
+    useEffect(() => {
+        if (user == null) {
+            toast.warn("User not found, logging out!!");
+            navigate('/logout');
+        } else if (user.account == null) {
+            toast.warn("Account not created yet!!");
+            navigate('/welcome');
+        }
+    }, [user, navigate]);
 
     const [formData, setFormData] = useState<TransferFormDataType>({
         fromAccountNo: user?.account?.accountNo,

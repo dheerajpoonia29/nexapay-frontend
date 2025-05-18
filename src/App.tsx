@@ -1,6 +1,6 @@
 import './App.css'
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage';
@@ -26,24 +26,28 @@ import { ToastContainer } from 'react-toastify';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [hasFetched, setHasFetched] = useState(false);
+  
   const [user, setUser] = useState<UserType | null>(null);
   const [transactions, setTransactions] = useState<TransferType[] | null>([]);
-  const [hasFetched, setHasFetched] = useState(false);
   const [banks, setBanks] = useState<BankType[] | null>(null);
 
-  useEffect(() => {
-    const fetchBanks = async () => {
-      console.log("fetching banks");
-      const banksList = await getBanks();
-      setBanks(banksList);
-    };
+  const fetchBanks = async () => {
+    console.log("fetching banks");
+    const banksList = await getBanks();
+    setBanks(banksList);
+  };
 
-    fetchBanks();
-  }, []);
 
   useEffect(() => {
-    console.log("something changes");
-  }, [setIsLoggedIn]);
+    if (isLoggedIn === true) {
+      fetchBanks();
+    } else {
+      setUser(null);
+      setTransactions(null);
+      setBanks(null);
+    }
+  }, [isLoggedIn]);
 
   return (
     <BrowserRouter>

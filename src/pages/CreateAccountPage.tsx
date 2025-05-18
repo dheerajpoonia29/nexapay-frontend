@@ -1,7 +1,7 @@
 import type { BranchType, AccountCreateFormDataType, BankType, UserType } from '../helper/TypeConstants';
 import { useNavigate } from 'react-router-dom';
 import { createAccount } from '../client/AccountClient';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 interface Props {
@@ -12,10 +12,12 @@ interface Props {
 
 const CreateAccountPage = ({ user, setUser, banks }: Props) => {
     const navigate = useNavigate();
-    if (user == null) {
-        toast.warn("User not found, logging out!!");
-        navigate('/logout');
-    }
+    useEffect(() => {
+        if (user == null) {
+            toast.warn("User not found, logging out!!");
+            navigate('/logout');
+        }
+    }, [user, navigate]);
 
     const [branches, setBranches] = useState<BranchType[] | null>(null);
 

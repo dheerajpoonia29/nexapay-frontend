@@ -15,7 +15,6 @@ const LoginPage = ({ setIsLoggedIn, setUser }:
         password: ""
     });
 
-    // todo make other handleChange like this
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };

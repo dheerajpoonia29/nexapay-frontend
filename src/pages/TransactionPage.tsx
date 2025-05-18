@@ -18,14 +18,15 @@ const TransactionPage = ({
     setHasFetched: (val: boolean) => void;
 }) => {
     const navigate = useNavigate();
-    if (user == null) {
-        toast.warn("User not found, logging out!!");
-        navigate('/logout');
-    }
-    if (user?.account == null) {
-        toast.warn("Account not created yet!!");
-        navigate('/welcome');
-    }
+    useEffect(() => {
+        if (user == null) {
+            toast.warn("User not found, logging out!!");
+            navigate('/logout');
+        } else if (user.account == null) {
+            toast.warn("Account not created yet!!");
+            navigate('/welcome');
+        }
+    }, [user, navigate]);
 
     useEffect(() => {
         if (user?.account?.accountNo && !hasFetched) {

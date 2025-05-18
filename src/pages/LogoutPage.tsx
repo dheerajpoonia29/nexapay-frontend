@@ -5,10 +5,9 @@ const LogoutPage = ({ setIsLoggedIn }: { setIsLoggedIn: (val: boolean) => void }
     const navigate = useNavigate();
 
     const handleSubmit = () => {
+        setIsLoggedIn(false);
         console.log('logging out');
         toast.warn("Logout successfully");
-        // todo setUser null
-        setIsLoggedIn(false);
         navigate('/');
     };
 

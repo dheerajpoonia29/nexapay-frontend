@@ -2,6 +2,7 @@ import type { UserType } from '../helper/TypeConstants';
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 
 const BankingPage = ({ user }:
@@ -9,14 +10,15 @@ const BankingPage = ({ user }:
         user: UserType | null;
     }) => {
     const navigate = useNavigate();
-    if (user == null) {
-        toast.warn("User not found, logging out!!");
-        navigate('/logout');
-    }
-    if (user?.account == null) {
-        toast.warn("Account not created yet!!");
-        navigate('/welcome');
-    }
+    useEffect(() => {
+        if (user == null) {
+            toast.warn("User not found, logging out!!");
+            navigate('/logout');
+        } else if (user.account == null) {
+            toast.warn("Account not created yet!!");
+            navigate('/welcome');
+        }
+    }, [user, navigate]);
 
     const bankingOptions = [
         // { label: "Deposit", route: "/banking/deposit" },
