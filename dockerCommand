@@ -1,3 +1,0 @@
-docker compose -f compose.dev.yaml up -d // -f file
-
-docker compose -f docker-compose.prod.yaml up --build
