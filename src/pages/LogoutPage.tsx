@@ -11,7 +11,6 @@ const LogoutPage = ({ setIsLoggedIn }: { setIsLoggedIn: (val: boolean) => void }
         navigate('/');
     };
 
-
     return (
         <div className="flex items-center justify-center min-h-[80vh] bg-gray-100 px-4">
             <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-2xl text-gray-800">

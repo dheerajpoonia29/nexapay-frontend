@@ -9,7 +9,7 @@ interface Props {
     setUser: (val: UserType) => void;
 }
 
-export const deleteAccount = async ({ user, setUser }: Props): Promise<void> => {
+export const deleteAccount = async ({ user, setUser }: Props): Promise<boolean> => {
     console.log('inside deleteAccount client');
 
     const ENDPOINT = '/account/delete-account';
@@ -32,6 +32,7 @@ export const deleteAccount = async ({ user, setUser }: Props): Promise<void> => 
                 account: null
             });
             toast.success("Account deleted successfully.");
+            return true;
         } else if (result.responseStatusInt === 404) {
             toast.warn("Account not found.");
         } else {
@@ -42,6 +43,7 @@ export const deleteAccount = async ({ user, setUser }: Props): Promise<void> => 
         console.error('deleteAccount error: ', err);
         toast.error('Internal server error');
     }
+    return false;
 };
 
 interface CreateAccountProps {
@@ -50,7 +52,7 @@ interface CreateAccountProps {
     formData: AccountCreateFormDataType;
 }
 
-export const createAccount = async ({ user, setUser, formData }: CreateAccountProps): Promise<void> => {
+export const createAccount = async ({ user, setUser, formData }: CreateAccountProps): Promise<boolean> => {
     console.log('inside createAccount client');
 
     const ENDPOINT = '/account/create';
@@ -83,6 +85,7 @@ export const createAccount = async ({ user, setUser, formData }: CreateAccountPr
                 accountData: result?.responseData
             }));
             toast.success("Account created successfully.");
+            return true;
         } else if (result.responseStatusInt === 409) {
             toast.warn("Account already exist.");
         } else {
@@ -93,6 +96,7 @@ export const createAccount = async ({ user, setUser, formData }: CreateAccountPr
         console.error('createAccount error: ', err);
         toast.error('Internal server error');
     }
+    return false;
 }
 
 export const getAccount = async ({ user, setUser }: Props): Promise<boolean> => {
