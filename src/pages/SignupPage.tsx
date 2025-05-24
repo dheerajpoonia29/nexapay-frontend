@@ -37,7 +37,7 @@ const SignupPage = () => {
                     className="bg-gray-400 p-20 shadow rounded w-full max-w-md text-white"
                 >
                     <h2 className="text-2xl font-semibold mb-6 text-center">
-                        Create your account
+                        Create your user account
                     </h2>
 
                     <div className="mb-4">
